@@ -1,28 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class StateMachine : MonoBehaviour
 {
 	public State currentState;
 	public State defaultState;
 
 	[Header("States")]
-	Dictionary<string, State> states = new Dictionary<string, State>();
+	public Dictionary<string, State> states = new Dictionary<string, State>();
+	public IdleState idle;
+	public MoveState move;
+
 
 
 	public Animator animator;
 
 	public void Start()
 	{
-		animator = GetComponent<animator>();
+		animator = GetComponent<Animator>();
 
-		states.Add("Idle", IdleState);
-        states.Add("Move", MoveState);
-        states.Add("Sprint", SprintState);
-        states.Add("Crouch", CrouchState);
+		states.Add("Idle", idle);
+        states.Add("Move", move);
+        //states.Add("Sprint", SprintState);
+        //states.Add("Crouch", CrouchState);
 
-		ChangeState(IdleState);
+		ChangeState(idle);
 
     }
 
@@ -52,7 +55,7 @@ public class StateMachine : MonoBehaviour
 	{
 		if (currentState != null)
 		{
-			currentState.OnExit(this)
+			currentState.OnExit(this);
 		}
 
 		currentState = newState;

@@ -1,11 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
+[System.Serializable]
 public abstract class State : ScriptableObject
 {
 	public string stateName;
 
-	public virtual bool CanEnter(StatMachine stateMachine)
+	public virtual bool CanEnter(StateMachine stateMachine)
 	{
 		return true;
 	}
