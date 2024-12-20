@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public static class Vector3Extensions(this Vector3 vector, float? x = null, float? y = null, float? z = null)
+public static class Vector3Extensions
 {
     public static Vector3 With(this Vector3 vector, float? x = null, float? y = null, float? z = null)
     {
@@ -136,7 +136,7 @@ public static class Vector3Extensions(this Vector3 vector, float? x = null, floa
 
     public static Vector3 RandomInsideSphere(this Vector3 vector, float radius)
     {
-        return vector + Random.insideUnitSphere * radius;
+        return vector + UnityEngine.Random.insideUnitSphere * radius;
     }
 
     public static Vector3 Log(this Vector3 vector)
@@ -144,7 +144,21 @@ public static class Vector3Extensions(this Vector3 vector, float? x = null, floa
         return new Vector3(Mathf.Log(vector.x), Mathf.Log(vector.y), Mathf.Log(vector.z));
     }
 
+    //sphere detection
+    public static bool HasObjectWithLayer(this Vector3 position, int layer, float radius = 0.1f)
+    {
+        int layerMask = 1 << layer;
+        Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask);
+        return colliders.Length > 0;
+    }
 
-    
+    //box detection
+    public static bool HasObjectWithLayerInBox(this Vector3 position, int layer, Vector3 halfExtents, Quaternion rotation = default)
+    {
+        int layerMask = 1 << layer;
+        Collider[] colliders = Physics.OverlapBox(position, halfExtents, rotation, layerMask);
+        return colliders.Length > 0;
+    }
+
 
 }

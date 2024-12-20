@@ -64,12 +64,6 @@ public static class AnimatorExtensions
     {
         animator.SetIKRotationWeight(goal, weight);
     }
-    public static void SetLookAtPosition(this Animator animator, Vector3 position)
-    {
-        animator.SetLookAtPosition
-
-    }
-
 
     public static void SetLookAtWeight(this Animator animator, float weight)
     {
@@ -105,11 +99,6 @@ public static class AnimatorExtensions
     public static void CrossFadeToState(this Animator animator, string stateName, float transitionDuration, int layer)
     {
         animator.CrossFade(stateName, transitionDuration, layer);
-    }
-
-    public static string GetCurrentStateName(this Animator animator)
-    {
-        return animator.GetCurrentAnimatorStateInfo(0).IsName("");
     }
 
     public static float GetCurrentNormalizedTime(this Animator animator)
@@ -208,42 +197,6 @@ public static class AnimatorExtensions
     public static void ResumeAnimations(this Animator animator)
     {
         animator.speed = 1;
-    }
-
-    public static void AddEventToAnimation(this Animator animator, string animationName, float time, string functionName)
-    {
-        var clip = animator.runtimeAnimatorController.animationClips.FirstOrDefault(c => c.name == animationName);
-        if (clip != null)
-        {
-            AnimationEvent newEvent = new AnimationEvent
-            {
-                time = time,
-                functionName = functionName
-            };
-            clip.AddEvent(newEvent);
-        }
-    }
-
-    public static float GetAnimationDuration(this Animator animator, string animationName)
-    {
-        var clip = animator.runtimeAnimatorController.animationClips.FirstOrDefault(c => c.name == animationName);
-        return clip != null ? clip.length : 0f;
-    }
-
-    public static bool HasEvent(this Animator animator, string animationName, string functionName)
-    {
-        var clip = animator.runtimeAnimatorController.animationClips.FirstOrDefault(c => c.name == animationName);
-        if (clip != null)
-        {
-            return clip.events.Any(e => e.functionName == functionName);
-        }
-        return false;
-    }
-
-
-    public static string GetCurrentAnimationName(this Animator animator)
-    {
-        return animator.GetCurrentAnimatorStateInfo(0).IsName("");
     }
 
     public static void FadeBetweenStates(this Animator animator, string fromState, string toState, float duration)

@@ -69,11 +69,6 @@ public static class MaterialExtensions
     {
         material.SetMatrix(propertyID, matrix);
     }
-    public static void SetTexture(this Material material, int propertyID, Texture texture)
-    {
-        material.Set
-
-    }
 
     public static void SetMainColor(this Material material, Color color)
     {
@@ -109,11 +104,6 @@ public static class MaterialExtensions
     public static void SetEmissionColor(this Material material, Color color)
     {
         material.SetColor("_EmissionColor", color);
-    }
-
-    public static void SetEmissionEnabled(this Material material, bool enabled)
-    {
-        material.EnableKeyword("_EMISSION", enabled);
     }
 
     public static void SetTransparency(this Material material, float transparency)

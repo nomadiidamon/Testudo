@@ -172,12 +172,6 @@ public static class ParticleSystemExtensions
         main.startRotation = rotation;
     }
 
-    public static void SetStartRotation3D(this ParticleSystem ps, Vector3 rotation)
-    {
-        var main = ps.main;
-        main.startRotation3D = rotation;
-    }
-
     public static void SetGravityModifier(this ParticleSystem ps, float modifier)
     {
         var main = ps.main;
@@ -224,12 +218,6 @@ public static class ParticleSystemExtensions
     {
         var main = ps.main;
         main.startLifetime = new ParticleSystem.MinMaxCurve(1, randomness);
-    }
-
-    public static void SetStartColorRandomness(this ParticleSystem ps, float randomness)
-    {
-        var main = ps.main;
-        main.startColor = new ParticleSystem.MinMaxGradient(new Gradient(), randomness);
     }
 
     public static void PauseSystem(this ParticleSystem ps)

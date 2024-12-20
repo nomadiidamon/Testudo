@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DungeonManager : MonoBehaviour
@@ -28,13 +29,14 @@ public class DungeonManager : MonoBehaviour
     public int maxCorridorWidth = 5;
     public int minCorridorHeight = 3;
     public int maxCorridorHeight = 5;
+    public int minCorridorLength = 3;
+    public int maxCorridorLength = 5;
     public int minNumberOfCorridors = 2;
     public int maxNumberOfCorridors = 5;
 
     [Header("Prefabs")]
-    public GameObject roomPrefab; // Room floor prefab (thin cube)
-    public GameObject corridorWallPrefab; // Corridor wall prefab (plane)
-    public GameObject corridorFloorPrefab; // Corridor floor prefab (thin cube)
+    public GameObject roomFloorPrefab; // Room floor prefab (thin cube)
+    public GameObject corridorPrefab; // Corridor wall prefab (plane)
 
     [Header("Collections")]
     private List<Room> rooms = new List<Room>();
@@ -52,21 +54,28 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
+
+    public void Update()
+    {
+        GenerateDungeon();
+    }
+
+
     public void GenerateDungeon()
     {
-        int worldWidth = Random.Range(minWorldWidth, maxWorldWidth);
-        int worldLength = Random.Range(minWorldLength, maxWorldLength);
-        int worldHeight = Random.Range(minWorldHeight, maxWorldHeight);
+        int worldWidth = UnityEngine.Random.Range(minWorldWidth, maxWorldWidth);
+        int worldLength = UnityEngine.Random.Range(minWorldLength, maxWorldLength);
+        int worldHeight = UnityEngine.Random.Range(minWorldHeight, maxWorldHeight);
 
         Vector3 worldSize = new Vector3(worldWidth, worldHeight, worldLength);
 
-        int numberOfRooms = Random.Range(minNumberOfRooms, maxNumberOfRooms);
+        int numberOfRooms = UnityEngine.Random.Range(minNumberOfRooms, maxNumberOfRooms);
         for (int i = 0; i < numberOfRooms; i++)
         {
             GenerateRoom(worldSize);
         }
 
-        int numberOfCorridors = Random.Range(minNumberOfCorridors, maxNumberOfCorridors);
+        int numberOfCorridors = UnityEngine.Random.Range(minNumberOfCorridors, maxNumberOfCorridors);
         for (int i = 0; i < numberOfCorridors; i++)
         {
             GenerateCorridor(worldSize);

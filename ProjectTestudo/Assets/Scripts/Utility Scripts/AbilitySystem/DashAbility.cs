@@ -6,7 +6,7 @@
     {
         if (CanActivate())
         {
-            Debug.Log("Dash activated!");
+            UnityEngine.Debug.Log("Dash activated!");
         }
     }
 }

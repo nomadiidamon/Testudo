@@ -1,10 +1,20 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;  
+using UnityEngine;
 
-public class CameraExtensions
+public static class CameraExtensions
 {
+    private static MonoBehaviour coroutineRunner;
+
+    public static void Initialize(MonoBehaviour runner)
+    {
+        coroutineRunner = runner;
+    }
+
     public static void ShakeScreen(this Camera camera, float magnitude, float duration)
     {
-        camera.StartCoroutine(ShakeScreenCoroutine(camera, magnitude, duration));
+        coroutineRunner.StartCoroutine(ShakeScreenCoroutine(camera, magnitude, duration));
     }
 
     private static IEnumerator ShakeScreenCoroutine(Camera camera, float magnitude, float duration)
@@ -14,7 +24,7 @@ public class CameraExtensions
 
         while (timeElapsed < duration)
         {
-            camera.transform.position = originalPosition + Random.insideUnitSphere * magnitude;
+            camera.transform.position = originalPosition + UnityEngine.Random.insideUnitSphere * magnitude;
             timeElapsed += Time.deltaTime;
             yield return null;
         }
@@ -33,7 +43,7 @@ public class CameraExtensions
 
     public static void FadeOut(this Camera camera, float duration)
     {
-        camera.StartCoroutine(FadeOutCoroutine(camera, duration));
+        coroutineRunner.StartCoroutine(FadeOutCoroutine(camera, duration));
     }
 
     private static IEnumerator FadeOutCoroutine(Camera camera, float duration)
@@ -52,7 +62,7 @@ public class CameraExtensions
 
     public static void FadeIn(this Camera camera, float duration)
     {
-        camera.StartCoroutine(FadeInCoroutine(camera, duration));
+        coroutineRunner.StartCoroutine(FadeInCoroutine(camera, duration));
     }
 
     private static IEnumerator FadeInCoroutine(Camera camera, float duration)
@@ -93,7 +103,6 @@ public class CameraExtensions
     {
         camera.transform.LookAt(target.transform);
     }
-
 
     public static void Follow(this Camera camera, Transform target, Vector3 offset)
     {
@@ -172,57 +181,6 @@ public class CameraExtensions
         camera.transform.RotateAround(target.position, axis, speed * Time.deltaTime);
     }
 
-    public static void ApplyBlurEffect(this Camera camera, float blurIntensity)
-    {
-        var postProcessing = camera.GetComponent<PostProcessingBehaviour>();
-        var gaussianBlur = postProcessing.profile.motionBlur;
-        gaussianBlur.settings.intensity = blurIntensity;
-    }
-
-    public static void ApplyVignetteEffect(this Camera camera, float vignetteIntensity)
-    {
-        var postProcessing = camera.GetComponent<PostProcessingBehaviour>();
-        var vignette = postProcessing.profile.vignette;
-        vignette.settings.intensity = vignetteIntensity;
-    }
-
-    public static void ApplyChromaticAberrationEffect(this Camera camera, float chromaticAberrationIntensity)
-    {
-        var postProcessing = camera.GetComponent<PostProcessingBehaviour>();
-        var chromaticAberration = postProcessing.profile.chromaticAberration;
-        chromaticAberration.settings.intensity = chromaticAberrationIntensity;
-    }
-
-    public static void ApplyGrainEffect(this Camera camera, float grainIntensity)
-    {
-        var postProcessing = camera.GetComponent<PostProcessingBehaviour>();
-        var grain = postProcessing.profile.grain;
-        grain.settings.intensity = grainIntensity;
-    }
-
-    public static void ApplyColorGradingEffect(this Camera camera, ColorGradingModel.Settings colorGradingSettings)
-    {
-        var postProcessing = camera.GetComponent<PostProcessingBehaviour>();
-        var colorGrading = postProcessing.profile.colorGrading;
-        colorGrading.settings = colorGradingSettings;
-    }
-
-    public static void SetBloomIntensity(this Camera camera, float intensity)
-    {
-        var postProcessing = camera.GetComponent<PostProcessingBehaviour>();
-        var bloom = postProcessing.profile.bloom.settings;
-        bloom.intensity = intensity;
-        postProcessing.profile.bloom.settings = bloom;
-    }
-
-    public static void SetBloomThreshold(this Camera camera, float threshold)
-    {
-        var postProcessing = camera.GetComponent<PostProcessingBehaviour>();
-        var bloom = postProcessing.profile.bloom.settings;
-        bloom.threshold = threshold;
-        postProcessing.profile.bloom.settings = bloom;
-    }
-
     public static void ToggleBackgroundColor(this Camera camera, Color colorA, Color colorB)
     {
         camera.backgroundColor = camera.backgroundColor == colorA ? colorB : colorA;
@@ -230,13 +188,22 @@ public class CameraExtensions
 
     public static void SetBackgroundColor(this Camera camera, Color colorA, Color colorB, float duration)
     {
-        camera.StartCoroutine(ChangeBackgroundColorCoroutine(camera, colorA, colorB, duration));
+        coroutineRunner.StartCoroutine(ChangeBackgroundColorCoroutine(camera, colorA, colorB, duration));
+    }
+
+    private static IEnumerator ChangeBackgroundColorCoroutine(Camera camera, Color colorA, Color colorB, float duration)
+    {
+        float timer = 0;
+        while (timer < duration)
+        {
+            camera.backgroundColor = Color.Lerp(colorA, colorB, timer / duration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 
     public static void SetRenderTarget(this Camera camera, RenderTexture renderTexture)
     {
         camera.targetTexture = renderTexture;
     }
-
-
 }

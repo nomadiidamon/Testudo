@@ -47,22 +47,6 @@ public static class ColliderExtensions
     {
         collider.material = material;
     }
-
-    public static void SetCenter(this Collider collider, Vector3 center)
-    {
-        collider.center = center;
-    }
-
-    public static void SetSize(this Collider collider, Vector3 size)
-    {
-        collider.size = size;
-    }
-
-    public static void SetDirection(this Collider collider, int direction)
-    {
-        collider.direction = direction;
-    }
-
     public static bool IsTrigger(this Collider collider)
     {
         return collider.isTrigger;
@@ -374,13 +358,13 @@ public static class ColliderExtensions
 
     public static Vector3 GetVelocityAtContactPoint(this Collider collider, RaycastHit hit)
     {
-        Rigidbody rb = collider.GetAttachedRigidbody();
+        Rigidbody rb = collider.attachedRigidbody;
         return rb != null ? rb.GetPointVelocity(hit.point) : Vector3.zero;
     }
 
     public static Vector3 GetAngularVelocityAtContactPoint(this Collider collider, RaycastHit hit)
     {
-        Rigidbody rb = collider.GetAttachedRigidbody();
+        Rigidbody rb = collider.attachedRigidbody;
         return rb != null ? rb.GetPointVelocity(hit.point) : Vector3.zero;
     }
 

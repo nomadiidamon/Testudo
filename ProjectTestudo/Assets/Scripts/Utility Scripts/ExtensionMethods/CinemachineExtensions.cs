@@ -1,24 +1,9 @@
-﻿using System;
+﻿using Cinemachine;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Cinemachine;
 
 public static class CinemachineExtensions
 {
-    public static void SetLookAtTarget(this CinemachineVirtualCamera virtualCamera, Transform target)
-    {
-        CinemachineTransposer transposer = virtualCamera.GetCinemachineComponent < CinemachineTransposer
-    }
-
-    public static void SetLookAtTarget(this CinemachineVirtualCamera virtualCamera, Vector3 target)
-    {
-        CinemachineTransposer transposer = virtualCamera.GetCinemachineComponent < CinemachineTransposer
-    }
-
-    public static void SetLookAtTarget(this CinemachineVirtualCamera virtualCamera, GameObject target)
-    {
-        CinemachineTransposer transposer = virtualCamera.GetCinemachineComponent < CinemachineTransposer
-    }
-
     public static void Zoom(this CinemachineVirtualCamera vcam, float zoomAmount)
     {
         vcam.m_Lens.FieldOfView = Mathf.Clamp(vcam.m_Lens.FieldOfView + zoomAmount, 10f, 90f);
@@ -79,14 +64,6 @@ public static class CinemachineExtensions
         }
     }
 
-    public static void SetTiltAngle(this CinemachineVirtualCamera vcam, float tilt)
-    {
-        if (vcam.GetCinemachineComponent<CinemachineOrbitalTransposer>() != null)
-        {
-            vcam.GetCinemachineComponent<CinemachineOrbitalTransposer>().m_Rotation = tilt;
-        }
-    }
-
     public static void SetFollowSpeed(this CinemachineVirtualCamera vcam, float speed)
     {
         if (vcam.GetCinemachineComponent<CinemachineTransposer>() != null)
@@ -131,46 +108,11 @@ public static class CinemachineExtensions
         }
     }
 
-    public static void TransitionToCamera(this CinemachineBrain brain, CinemachineVirtualCamera targetCamera, float transitionTime)
-    {
-        brain.ActiveVirtualCamera = targetCamera;
-        brain.m_DefaultBlend.m_Time = transitionTime;
-    }
-
     public static void SetActiveCameraPriority(this CinemachineBrain brain, int priority)
     {
         foreach (var vcam in brain.GetComponentsInChildren<CinemachineVirtualCamera>())
         {
             vcam.m_Priority = priority;
-        }
-    }
-
-    public static void FadeOut(this CinemachineBrain brain, float duration)
-    {
-        brain.m_DefaultBlend.m_Time = duration;
-        brain.m_DefaultBlend.m_BlendStyle = CinemachineBlendDefinition.Style.Cut;
-    }
-
-    public static void FadeIn(this CinemachineBrain brain, float duration)
-    {
-        brain.m_DefaultBlend.m_Time = duration;
-        brain.m_DefaultBlend.m_BlendStyle = CinemachineBlendDefinition.Style.Cut;
-    }
-
-    public static void SmoothlyTransitionFov(this CinemachineVirtualCamera vcam, float targetFov, float speed)
-    {
-        vcam.StartCoroutine(SmoothFovTransition(vcam, targetFov, speed));
-    }
-
-    private static IEnumerator SmoothFovTransition(CinemachineVirtualCamera vcam, float targetFov, float speed)
-    {
-        float startFov = vcam.m_Lens.FieldOfView;
-        float timer = 0;
-        while (timer < speed)
-        {
-            vcam.m_Lens.FieldOfView = Mathf.Lerp(startFov, targetFov, timer / speed);
-            timer += Time.deltaTime;
-            yield return null;
         }
     }
 

@@ -12,15 +12,6 @@ public static class GameObjectExtensions
         }
     }
 
-    public static void SetActiveRecursively(this GameObject obj, bool active)
-    {
-        obj.SetActive(active);
-        foreach (Transform child in obj.transform)
-        {
-            child.gameObject.SetActiveRecursively(active);
-        }
-    }
-
     public static T GetOrAdd<T> (this GameObject gameObject) where T : Component
     {
         T component = gameObject.GetComponent<T>();
@@ -29,7 +20,7 @@ public static class GameObjectExtensions
         return component;
     }
 
-    public static T OrNull<T>(this T obj) where T : Object => (bool)obj ? obj : null;
+    public static T OrNull<T>(this T obj) where T : UnityEngine.Object => (bool)obj ? obj : null;
 
 
     public static GameObject FindChildByName(this GameObject gameObject, string childName)
@@ -153,9 +144,14 @@ public static class GameObjectExtensions
         gameObject.RotateToFace(target.position);
     }
 
-    public static ParticleSystem AddParticleSystem(this GameObject gameObject)
+    public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
     {
-        return gameObject.GetOrAddComponent<ParticleSystem>();
+        T component = gameObject.GetComponent<T>();
+        if (component == null)
+        {
+            component = gameObject.AddComponent<T>();
+        }
+        return component;
     }
 
     public static ParticleSystemRenderer AddParticleSystemRenderer(this GameObject gameObject)
@@ -163,10 +159,6 @@ public static class GameObjectExtensions
         return gameObject.GetOrAddComponent<ParticleSystemRenderer>();
     }
 
-    public static ParticleSystem.MainModule GetMainModule(this GameObject gameObject)
-    {
-        return gameObject.AddParticleSystem().main;
-    }
 }
 
 

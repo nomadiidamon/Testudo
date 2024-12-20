@@ -3,9 +3,6 @@ using UnityEngine;
 
 public static class TransformExtensions
 {
-	public static Quaternion Rotate(this Transform) => transform.rotation;
-
-
     public static Transform FindChildByName(this Transform transform, string name)
     {
         foreach (Transform child in transform)

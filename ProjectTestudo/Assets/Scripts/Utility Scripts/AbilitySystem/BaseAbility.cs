@@ -23,7 +23,7 @@ public abstract class BaseAbility : IAbility
     public bool CanActivate()
     {
         if (!IsEnabled) return false;
-
+        
         foreach (var condition in Conditions)
         {
             if (!condition.IsConditionMet())

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public static class RigidbodyExtensions
@@ -118,8 +119,8 @@ public static class RigidbodyExtensions
 
     public static void SetRandomVelocity(this Rigidbody rb, float minSpeed, float maxSpeed)
     {
-        float speed = Random.Range(minSpeed, maxSpeed);
-        rb.velocity = Random.onUnitSphere * speed;
+        float speed = UnityEngine.Random.Range(minSpeed, maxSpeed);
+        rb.velocity = UnityEngine.Random.onUnitSphere * speed;
     }
 
     public static void ResetVelocity(this Rigidbody rb)
@@ -204,7 +205,9 @@ public static class RigidbodyExtensions
 
     public static void SmoothMoveToPoint(this Rigidbody rb, Vector3 targetPosition, float smoothTime)
     {
-        rb.position = Vector3.SmoothDamp(rb.position, targetPosition, ref rb.velocity, smoothTime);
+        Vector3 velocity = rb.velocity;
+        rb.position = Vector3.SmoothDamp(rb.position, targetPosition, ref velocity, smoothTime);
+        rb.velocity = velocity;
     }
 
     public static bool IsMoving(this Rigidbody rb)
@@ -243,7 +246,7 @@ public static class RigidbodyExtensions
 
     public static void ApplyRandomTorque(this Rigidbody rb, float torqueAmount)
     {
-        rb.AddTorque(Random.onUnitSphere * torqueAmount, ForceMode.Impulse);
+        rb.AddTorque(UnityEngine.Random.onUnitSphere * torqueAmount, ForceMode.Impulse);
     }
 
     public static void ApplyPushForce(this Rigidbody rb, float forceAmount)
@@ -311,7 +314,7 @@ public static class RigidbodyExtensions
 
     public static void ApplyRandomDirectionalForce(this Rigidbody rb, float forceMagnitude)
     {
-        Vector3 randomDirection = Random.onUnitSphere;
+        Vector3 randomDirection = UnityEngine.Random.onUnitSphere;
         rb.AddForce(randomDirection * forceMagnitude, ForceMode.Impulse);
     }
 
@@ -332,7 +335,7 @@ public static class RigidbodyExtensions
 
     public static void ApplyShakeForce(this Rigidbody rb, float shakeMagnitude)
     {
-        Vector3 shakeForce = new Vector3(Random.Range(-shakeMagnitude, shakeMagnitude), 0, Random.Range(-shakeMagnitude, shakeMagnitude));
+        Vector3 shakeForce = new Vector3(UnityEngine.Random.Range(-shakeMagnitude, shakeMagnitude), 0, UnityEngine.Random.Range(-shakeMagnitude, shakeMagnitude));
         rb.AddForce(shakeForce, ForceMode.Impulse);
     }
 
@@ -362,12 +365,6 @@ public static class RigidbodyExtensions
         Vector3 direction = (rb.position - point).normalized;
         rb.AddForce(direction * forceAmount, ForceMode.Force);
     }
-
-    public static void ApplyImpulseBySpeed(this Rigidbody rb, float speedMultiplier)
-    {
-        rb.AddForce(rb.velocity.normalized * speedMultiplier, ForceMode.Impulse);
-    }
-
 
     public static void ApplyImpulseBySpeed(this Rigidbody rb, float speedMultiplier)
     {
@@ -423,13 +420,6 @@ public static class RigidbodyExtensions
     }
 
 
-    public static void ApplyMagneticForce(this Rigidbody rb, Vector3 targetPosition, float magneticStrength)
-    {
-        Vector3 direction = (targetPosition - rb.position).normalized;
-        rb.AddForce(direction * magneticStrength, ForceMode.Force);
-    }
-
-
     public static void ApplyUpwardForce(this Rigidbody rb, float upwardStrength)
     {
         rb.AddForce(Vector3.up * upwardStrength, ForceMode.Impulse);
@@ -443,7 +433,7 @@ public static class RigidbodyExtensions
 
     public static void ApplyRandomPushForce(this Rigidbody rb, float forceStrength)
     {
-        Vector3 randomDirection = Random.onUnitSphere;
+        Vector3 randomDirection = UnityEngine.Random.onUnitSphere;
         rb.AddForce(randomDirection * forceStrength, ForceMode.Force);
     }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 
-public interface IStateCondition 
+public interface IStateCondition
 {
-	public bool IsConditionMet(StateMachine stateMachine);
-	
+    public bool IsConditionMet();
 }

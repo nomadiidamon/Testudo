@@ -14,7 +14,7 @@ public static class RoomFactory
         Vector3 position = new Vector3(xPos, 0, zPos);
 
         // Create the room and return it
-        return new Room(position, width, length, DungeonManager.Instance.roomPrefab);
+        return new Room(position, width, length, DungeonManager.Instance.roomFloorPrefab);
     }
 }
 

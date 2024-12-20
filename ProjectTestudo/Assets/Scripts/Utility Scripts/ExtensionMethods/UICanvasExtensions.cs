@@ -80,7 +80,6 @@ public static class UICanvasExtensions
             canvasGroup = canvas.gameObject.AddComponent<CanvasGroup>();
         }
         bool startInteractable = canvasGroup.interactable;
-        float timeElapsed = 0;
         canvasGroup.interactable = startInteractable;
     }
 

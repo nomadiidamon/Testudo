@@ -14,6 +14,6 @@ public static class CorridorFactory
         Vector3 position = new Vector3(xPos, 0, zPos);
 
         // Create the corridor and return it
-        return new Corridor(position, width, height, length, DungeonManager.Instance.corridorWallPrefab, DungeonManager.Instance.corridorFloorPrefab);
+        return new Corridor(position, width, height, length, DungeonManager.Instance.corridorPrefab );
     }
 }

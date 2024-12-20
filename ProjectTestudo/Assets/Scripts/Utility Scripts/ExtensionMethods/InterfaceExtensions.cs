@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 
@@ -13,23 +16,6 @@ public static class InterfaceExtensions
     public static bool Implements<TInterface>(this Type type)
     {
         return typeof(TInterface).IsAssignableFrom(type);
-    }
-
-    public static bool TryCastTo<TInterface>(this object obj, out TInterface result) where TInterface : class
-    {
-        result = obj as TInterface;
-        return result != null;
-    }
-
-    public static bool TryCastTo<TInterface>(this object obj, out TInterface result) where TInterface : struct
-    {
-        if (obj is TInterface)
-        {
-            result = (TInterface)obj;
-            return true;
-        }
-        result = default(TInterface);
-        return false;
     }
 
     public static bool TryCastTo<TInterface>(this object obj, out TInterface result)
@@ -64,9 +50,9 @@ public static class InterfaceExtensions
         return typeof(TInterface).IsAssignableFrom(type);
     }
 
-    public static string[] GetMethods<TInterface>(this TInterface obj)
+    public static string[] GetEvents<TInterface>(this TInterface obj)
     {
-        return typeof(TInterface).GetMethods().Select(m => m.Name).ToArray();
+        return typeof(TInterface).GetEvents().Select(e => e.Name).ToArray();
     }
 
     public static string[] GetProperties<TInterface>(this TInterface obj)
@@ -77,11 +63,6 @@ public static class InterfaceExtensions
     public static string[] GetFields<TInterface>(this TInterface obj)
     {
         return typeof(TInterface).GetFields().Select(f => f.Name).ToArray();
-    }
-
-    public static string[] GetEvents<TInterface>(this TInterface obj)
-    {
-        return typeof(TInterface).GetEvents().Select(e => e.Name).ToArray();
     }
 
     public static string[] GetInterfaces<TInterface>(this TInterface obj)
@@ -193,11 +174,6 @@ public static class InterfaceExtensions
         return property?.GetIndexParameters().Select(p => p.ParameterType).ToArray();
     }
 
-    public static EventInfo[] GetEvents<TInterface>(this TInterface obj)
-    {
-        return typeof(TInterface).GetEvents();
-    }
-
     public static void AddEventListener<TInterface>(this TInterface obj, string eventName, Delegate listener)
     {
         var eventInfo = typeof(TInterface).GetEvent(eventName);
@@ -213,7 +189,14 @@ public static class InterfaceExtensions
     public static void InvokeEvent<TInterface>(this TInterface obj, string eventName, params object[] args)
     {
         var eventInfo = typeof(TInterface).GetEvent(eventName);
-        eventInfo?.Raise(obj, args);
+        var eventDelegate = (MulticastDelegate)eventInfo?.GetRaiseMethod()?.Invoke(obj, null);
+        if (eventDelegate != null)
+        {
+            foreach (var handler in eventDelegate.GetInvocationList())
+            {
+                handler.Method.Invoke(handler.Target, args);
+            }
+        }
     }
 
     public static void AddEventHandler<TInterface>(this TInterface obj, string eventName, Delegate handler)
@@ -228,12 +211,6 @@ public static class InterfaceExtensions
         eventInfo?.RemoveEventHandler(obj, handler);
     }
 
-    public static void RaiseEvent<TInterface>(this TInterface obj, string eventName, params object[] args)
-    {
-        var eventInfo = typeof(TInterface).GetEvent(eventName);
-        eventInfo?.Raise(obj, args);
-    }
-
     public static void AddListener<TInterface>(this TInterface obj, string eventName, Delegate listener)
     {
         var eventInfo = typeof(TInterface).GetEvent(eventName);
@@ -244,12 +221,6 @@ public static class InterfaceExtensions
     {
         var eventInfo = typeof(TInterface).GetEvent(eventName);
         eventInfo?.RemoveEventHandler(obj, listener);
-    }
-
-    public static void Raise<TInterface>(this TInterface obj, string eventName, params object[] args)
-    {
-        var eventInfo = typeof(TInterface).GetEvent(eventName);
-        eventInfo?.Raise(obj, args);
     }
 
     public static bool ContainsMethod<TInterface>(this TInterface obj, string methodName)
@@ -266,12 +237,6 @@ public static class InterfaceExtensions
     {
         var method = typeof(TInterface).GetMethod(methodName);
         return method?.ReturnType;
-    }
-
-    public static bool IsMethodAsync<TInterface>(this TInterface obj, string methodName)
-    {
-        var method = typeof(TInterface).GetMethod(methodName);
-        return method?.GetCustomAttributes(typeof(AsyncStateMachineAttribute), true).Any() ?? false;
     }
 
     public static bool IsMethodVirtual<TInterface>(this TInterface obj, string methodName)

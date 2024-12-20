@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public static class LightExtensions
 {
+    private static MonoBehaviour GetMonoBehaviour(Light light)
+    {
+        return light.GetComponent<MonoBehaviour>();
+    }
 
     public static void SetIntensity(this Light light, float intensity)
     {
@@ -21,7 +27,7 @@ public static class LightExtensions
 
     public static void Flicker(this Light light, float minIntensity, float maxIntensity, float duration)
     {
-        light.StartCoroutine(FlickerCoroutine(light, minIntensity, maxIntensity, duration));
+        GetMonoBehaviour(light).StartCoroutine(FlickerCoroutine(light, minIntensity, maxIntensity, duration));
     }
 
     private static IEnumerator FlickerCoroutine(Light light, float minIntensity, float maxIntensity, float duration)
@@ -37,7 +43,7 @@ public static class LightExtensions
 
     public static void FadeOut(this Light light, float duration)
     {
-        light.StartCoroutine(FadeOutCoroutine(light, duration));
+        GetMonoBehaviour(light).StartCoroutine(FadeOutCoroutine(light, duration));
     }
 
     private static IEnumerator FadeOutCoroutine(Light light, float duration)
@@ -54,7 +60,7 @@ public static class LightExtensions
 
     public static void FadeIn(this Light light, float duration)
     {
-        light.StartCoroutine(FadeInCoroutine(light, duration));
+        GetMonoBehaviour(light).StartCoroutine(FadeInCoroutine(light, duration));
     }
 
     private static IEnumerator FadeInCoroutine(Light light, float duration)
@@ -133,7 +139,4 @@ public static class LightExtensions
     {
         light.areaSize = size;
     }
-
-
-
 }

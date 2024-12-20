@@ -6,7 +6,7 @@
     {
         if (CanActivate())
         {
-            Debug.Log("Jump activated!");
+            UnityEngine.Debug.Log("Jump activated!");
         }
     }
 }

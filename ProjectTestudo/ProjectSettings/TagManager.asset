@@ -11,10 +11,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - PG_Floor
+  - PG_Corridor
+  - PG_Wall
+  - SpecialComponent
   - 
   - 
   - 
