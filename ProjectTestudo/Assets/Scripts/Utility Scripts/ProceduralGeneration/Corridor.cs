@@ -12,10 +12,10 @@ public class Corridor
             return;
         }
 
-        if (position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Floor"), new Vector3(corridorWidth, corridorHeight, corridorLength)))
-        {
-            return;
-        }
+        //if (position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Floor"), new Vector3(corridorWidth, corridorHeight, corridorLength)))
+        //{
+        //    return;
+        //}
 
         startPosition = position;
         width = corridorWidth;
@@ -24,9 +24,9 @@ public class Corridor
 
 
         GameObject corridorFloor = Object.Instantiate(corridorPrefab, startPosition, Quaternion.identity);
-        corridorFloor.transform.localScale = new Vector3(width, height, length);
+        corridorFloor.transform.MultiplyLocalScale(new Vector3(width, height, length));
 
-        corridorFloor.layer = LayerMask.NameToLayer("PG_Floor");
+        corridorFloor.layer = LayerMask.NameToLayer("PG_Corridor");
 
     }
 

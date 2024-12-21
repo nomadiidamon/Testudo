@@ -160,5 +160,34 @@ public static class Vector3Extensions
         return colliders.Length > 0;
     }
 
+    public static bool CheckAllAxesForCollision(this Vector3 position, float radius, LayerMask layerMask)
+    {
+        // Check along X-axis
+        Vector3 xOffset = new Vector3(radius, 0, 0);
+        if (Physics.CheckSphere(position + xOffset, radius, layerMask) ||
+            Physics.CheckSphere(position - xOffset, radius, layerMask))
+        {
+            return true;
+        }
+
+        // Check along Y-axis
+        Vector3 yOffset = new Vector3(0, radius, 0);
+        if (Physics.CheckSphere(position + yOffset, radius, layerMask) ||
+            Physics.CheckSphere(position - yOffset, radius, layerMask))
+        {
+            return true;
+        }
+
+        // Check along Z-axis
+        Vector3 zOffset = new Vector3(0, 0, radius);
+        if (Physics.CheckSphere(position + zOffset, radius, layerMask) ||
+            Physics.CheckSphere(position - zOffset, radius, layerMask))
+        {
+            return true;
+        }
+
+        // No collisions detected
+        return false;
+    }
 
 }

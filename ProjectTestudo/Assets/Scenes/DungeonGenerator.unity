@@ -122,6 +122,74 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &636968430
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769398231554946675, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422511636382407469, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+        type: 3}
+      propertyPath: m_Name
+      value: PG_Floor
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2692263e8e20ebf41a776b4c1c21fff4, type: 3}
 --- !u!1 &711856339
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +277,7 @@ Transform:
   m_GameObject: {fileID: 711856339}
   serializedVersion: 2
   m_LocalRotation: {x: 0.28401473, y: -0, z: -0, w: 0.95882}
-  m_LocalPosition: {x: 45, y: 35.7, z: -23.1}
+  m_LocalPosition: {x: 30, y: 35.7, z: -23.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -288,28 +356,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d7e125729348045ac66b42a430c381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWorldWidth: 25
-  maxWorldWidth: 100
-  minWorldLength: 25
-  maxWorldLength: 100
+  minWorldWidth: 5
+  maxWorldWidth: 5
+  minWorldLength: 5
+  maxWorldLength: 5
   minWorldHeight: 1
   maxWorldHeight: 1
-  minRoomWidth: 5
-  maxRoomWidth: 15
+  maxNumOfRooms: 100
+  minRoomWidth: 1
+  maxRoomWidth: 1
   minRoomHeight: 1
-  maxRoomHeight: 2
-  minRoomLength: 5
-  maxRoomLength: 15
+  maxRoomHeight: 1
+  minRoomLength: 1
+  maxRoomLength: 1
   minNumberOfRooms: 1
-  maxNumberOfRooms: 5
+  maxNumberOfRooms: 1
   minCorridorWidth: 1
-  maxCorridorWidth: 3
+  maxCorridorWidth: 1
   minCorridorHeight: 1
-  maxCorridorHeight: 3
+  maxCorridorHeight: 1
   minCorridorLength: 1
-  maxCorridorLength: 3
-  minNumberOfCorridors: 2
-  maxNumberOfCorridors: 4
+  maxCorridorLength: 1
+  minNumberOfCorridors: 1
+  maxNumberOfCorridors: 1
   roomFloorPrefab: {fileID: 6422511636382407469, guid: 2692263e8e20ebf41a776b4c1c21fff4,
     type: 3}
   corridorPrefab: {fileID: 1043062095916606608, guid: c67d6e9eae084c7409f79e0554183e58,
@@ -454,3 +523,4 @@ SceneRoots:
   - {fileID: 711856342}
   - {fileID: 2037097662}
   - {fileID: 1967955817}
+  - {fileID: 636968430}
