@@ -5,9 +5,12 @@ using UnityEngine;
 public class DungeonManager : MonoBehaviour
 {
     public static DungeonManager Instance { get; private set; } // Singleton instance
-    //public Room room;
-    //public Corridor corridor;
     public bool isRandom = true;
+    public bool isFinishedMakingRooms = false;
+    public bool isFinishedRemovingWalls = false;
+    public bool isFinishedCheckingPaths = false;
+    public bool isFinishedAdjustingRooms = false;
+    public bool isFinished = false;
 
     [Header("Random World Parameters")]
     [Range(5,100)]public int randMinWorldWidth = 25;
@@ -16,8 +19,8 @@ public class DungeonManager : MonoBehaviour
     [Range(5, 100)] public int randMinWorldLength = 20;
     [Range(5, 200)] public int randMaxWorldLength = 100;
     [Space(3)]
-    [Range(1, 5)] public int randMinWorldHeight = 1;
-    [Range(1, 5)] public int randMaxWorldHeight = 3;
+    [Range(1, 10)] public int randMinWorldHeight = 1;
+    [Range(11, 100)] public int randMaxWorldHeight = 3;
     [Space(3)]
     [Range(5, 100)] public int randMaxNumOfRooms = 25;
     [Space(10)]
@@ -37,24 +40,11 @@ public class DungeonManager : MonoBehaviour
     [Space(10)]
 
 
-    [Header("Random Corridor Parameters")]
-    [Range(1, 50)] public int randMinCorridorWidth = 3;
-    [Range(1, 50)] public int randMaxCorridorWidth = 5;
-    [Space(3)]
-    [Range(1, 50)] public int randMinCorridorHeight = 3;
-    [Range(1, 50)] public int randMaxCorridorHeight = 5;
-    [Space(3)]
-    [Range(1, 50)] public int randMinCorridorLength = 3;
-    [Range(1, 50)] public int randMaxCorridorLength = 5;
-    [Space(3)]
-    [Range(1, 50)] public int randMinNumberOfCorridors = 2;
-    [Range(1, 50)] public int randMaxNumberOfCorridors = 5;
-    [Space(10)]
 
-
-
-
-
+    //[Header("Room Offsets")]
+    //public float xOffset = 0.05f; // Offset between rooms on the X-axis
+    //public float yOffset = 0.05f; // Offset between rooms on the Y-axis
+    //public float zOffset = 0.05f; // Offset between rooms on the Z-axis
 
 
 
@@ -63,11 +53,11 @@ public class DungeonManager : MonoBehaviour
     [Header("World Parameters")]
     [Range(5, 500)] public int WorldWidth = 100;
     [Space(3)]
-    [Range(1, 5)] public int WorldHeight = 1;
+    [Range(1, 500)] public int WorldHeight = 5;
     [Space(3)]
     [Range(5, 500)] public int WorldLength = 100;
     [Space(3)]
-    [Range(5, 1000)] public int NumOfRooms = 25;
+    public int NumOfRooms = 0;
     [Space(10)]
 
     [Header("Room Parameters")]
@@ -78,13 +68,6 @@ public class DungeonManager : MonoBehaviour
     [Range(1, 50)] public int RoomLength = 15;
     [Space(3)]
 
-    [Header("Corridor Parameters")]
-    [Range(1, 50)] public int CorridorWidth = 5;
-    [Space(3)]
-    [Range(1, 50)] public int CorridorHeight = 5;
-    [Space(3)]
-    [Range(1, 50)] public int CorridorLength = 5;
-    [Space(3)]
 
 
     [Header("Prefabs")]
@@ -108,24 +91,86 @@ public class DungeonManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        NumOfRooms = WorldWidth * WorldLength;
     }
 
 
     public void Update()
     {
-        if (rooms.Count >= randMaxNumOfRooms) {
-            return;
-        } else
+        if (!isFinished)
         {
             if (isRandom)
             {
-                GenerateRandomRooms();
+                if (rooms.Count >= randMaxNumOfRooms)
+                {
+                    isFinished = true;
+                    return;
+                }
+                GenerateRandomDungeon();
             }
             else
             {
-                GenerateGridOfRooms();
+
+                if (rooms.Count >= NumOfRooms)
+                {
+                    isFinished = true;
+                    return;
+                }
+                GenerateGridDungeon();
 
             }
+        }
+        else
+        {
+            // 
+        }
+    }
+
+    public void GenerateGridDungeon()
+    {
+        GenerateGridOfRooms();
+    }
+
+    void GenerateGridRoom(Vector3 worldSize, int width, int height, int length)
+    {
+        Room room = RoomFactory.CreateRoom(worldSize, width, height, length);
+        if (room != null)
+        {
+            rooms.Add(room);
+        }
+    }
+
+    void GenerateGridOfRooms()
+    {
+        currentWorldSize  = transform.position;
+
+        for (int h = 0; h < WorldHeight; h++)
+        {
+
+            for (int i = 0; i < WorldWidth; i++)
+            {
+
+                for(int j = 0; j < WorldLength; j++)
+                {
+                    GenerateGridRoom(currentWorldSize, RoomWidth, RoomHeight, RoomLength);
+                    currentWorldSize = currentWorldSize.Add(z:RoomLength);
+                }
+                currentWorldSize = currentWorldSize.WithZ(transform.position.z);
+                currentWorldSize = currentWorldSize.Add(x: RoomWidth);
+            }
+            currentWorldSize = currentWorldSize.WithX(transform.position.x);
+            currentWorldSize = currentWorldSize.Add(y: RoomHeight);
+
+        }
+    }
+
+
+    void GenerateRandomRoom(Vector3 worldSize)
+    {
+        Room room = RoomFactory.CreateRandomRoom(worldSize, randMinRoomWidth, randMaxRoomWidth, randMinRoomHeight, randMaxRoomHeight, randMinRoomLength, randMaxRoomLength);
+        if (room != null)
+        {
+            rooms.Add(room);
         }
     }
 
@@ -143,30 +188,6 @@ public class DungeonManager : MonoBehaviour
         }
 
     }
-    void GenerateGridOfRooms()
-    {
-        currentWorldSize  = transform.position;
-
-        for (int h = 0; h < WorldHeight; h++)
-        {
-
-            for (int i = 0; i < WorldWidth; i++)
-            {
-
-                for(int j = 0; j < WorldLength; j++)
-                {
-                    GenerateGridRoom(currentWorldSize, RoomWidth, RoomHeight, RoomLength);
-                    currentWorldSize.Add(z:RoomLength);
-                }
-                currentWorldSize.WithZ(transform.position.z);
-                currentWorldSize.Add(x:RoomWidth);
-            }
-            currentWorldSize.WithX(transform.position.x);
-            currentWorldSize.Add(y: RoomHeight);
-
-        }
-    }
-
 
     public void GenerateRandomDungeon()
     {
@@ -181,40 +202,11 @@ public class DungeonManager : MonoBehaviour
         {
             GenerateRandomRoom(currentWorldSize);
         }
-
-        int numberOfCorridors = UnityEngine.Random.Range(randMinNumberOfCorridors, randMaxNumberOfCorridors);
-        for (int i = 0; i < numberOfCorridors; i++)
-        {
-            GenerateCorridor(currentWorldSize);
-        }
     }
 
-    void GenerateRandomRoom(Vector3 worldSize)
-    {
-        Room room = RoomFactory.CreateRandomRoom(worldSize, randMinRoomWidth, randMaxRoomWidth, randMinRoomHeight, randMaxRoomHeight, randMinRoomLength, randMaxRoomLength);
-        if (room != null)
-        {
-            rooms.Add(room);
-        }
-    }
 
-    void GenerateGridRoom(Vector3 worldSize, int width, int height, int length)
-    {
-        Room room = RoomFactory.CreateRoom(worldSize, width, height, length);
-        if (room != null)
-        {
-            rooms.Add(room);
-        }
-    }
 
-    void GenerateCorridor(Vector3 worldSize)
-    {
-        Corridor corridor = CorridorFactory.CreateCorridor(worldSize, randMinCorridorWidth, randMaxCorridorWidth, randMinCorridorHeight, randMaxCorridorHeight);
-        if (corridor != null)
-        {
-            corridors.Add(corridor);
-        }
-    }
+
 
 
     private void OnDrawGizmos()

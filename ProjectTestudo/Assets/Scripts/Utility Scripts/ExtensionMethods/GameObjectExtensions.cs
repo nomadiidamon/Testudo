@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public static class GameObjectExtensions
@@ -157,6 +158,43 @@ public static class GameObjectExtensions
     public static ParticleSystemRenderer AddParticleSystemRenderer(this GameObject gameObject)
     {
         return gameObject.GetOrAddComponent<ParticleSystemRenderer>();
+    }
+
+
+    public static void ScaleStaticChildrenWithMesh(this GameObject parent, Vector3 scale, bool includeParent = false)
+    {
+        if (parent == null)
+        {
+            Debug.LogError("Parent GameObject is null.");
+            return;
+        }
+
+        // Scale the children.
+        foreach (Transform child in parent.transform)
+        {
+            if (child.gameObject.isStatic && child.GetComponent<MeshFilter>() != null)
+            {
+                child.localScale = Vector3.Scale(child.localScale, scale);
+            }
+        }
+
+        // Scale the parent if specified and it meets the criteria.
+        if (includeParent && parent.isStatic && parent.GetComponent<MeshFilter>() != null)
+        {
+            parent.transform.localScale = Vector3.Scale(parent.transform.localScale, scale);
+        }
+
+    }
+
+
+    /// <summary>
+    /// Gets all colliders attached to a GameObject and its children as an array.
+    /// </summary>
+    /// <param name="gameObject">The GameObject to search for colliders.</param>
+    /// <returns>An array of Colliders.</returns>
+    public static Collider[] GetAllColliders(this GameObject gameObject)
+    {
+        return gameObject.GetComponentsInChildren<Collider>().ToArray();
     }
 
 }

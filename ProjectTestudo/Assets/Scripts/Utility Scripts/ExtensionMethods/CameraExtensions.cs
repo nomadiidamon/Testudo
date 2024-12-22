@@ -206,4 +206,26 @@ public static class CameraExtensions
     {
         camera.targetTexture = renderTexture;
     }
+
+    public static Ray GetCenterRay(this Camera camera)
+    {
+        return camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+    }
+
+    public static void RotateAroundPoint(this Camera camera, Vector3 point, Vector3 axis, float angle)
+    {
+        camera.transform.RotateAround(point, axis, angle);
+    }
+
+    public static RaycastHit? RaycastFromCenter(this Camera camera, float maxDistance, LayerMask layerMask)
+    {
+        Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, layerMask))
+            return hit;
+        return null;
+    }
+
+
+
+
 }

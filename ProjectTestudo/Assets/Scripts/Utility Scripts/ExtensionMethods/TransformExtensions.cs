@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class TransformExtensions
@@ -286,6 +287,21 @@ public static class TransformExtensions
         return transform.position;
     }
 
+    public static List<GameObject> GetAllChildren(this Transform transform)
+    {
+        List<GameObject> children = new List<GameObject>();
+
+        // Loop through all child transforms and add their game objects to the list
+        foreach (Transform child in transform)
+        {
+            children.Add(child.gameObject);
+
+            // Recursively add children of children (if any)
+            children.AddRange(child.GetAllChildren());
+        }
+
+        return children;
+    }
 
 
 
