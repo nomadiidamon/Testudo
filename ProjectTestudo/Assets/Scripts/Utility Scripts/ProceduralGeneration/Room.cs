@@ -3,26 +3,36 @@ using System.Collections.Generic;
 
 public class Room : MonoBehaviour
 {
+    BoxCollider roomBounds;
     public Vector3 north, south, east, west;
     public float raycastLength = 75f;
 
-    public Room(Vector3 position, int width, int length, GameObject roomFloorPrefab)
+    public Room(Vector3 position, int width, int height, int length, GameObject roomFloorPrefab)
     {
-        if (position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Floor"), new Vector3(width, 0, length)))
+        if (position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Floor"), new Vector3(width, height, length)))
         {
             return;
         }
+
+        if(position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Room"), new Vector3(width, height, length)))
+        {
+            return;
+        }
+
+
 
         if (roomFloorPrefab == null)
         {
             Debug.LogError("Room floor prefab is null. Cannot create room.");
             return;
         }
-
+        
         GameObject roomFloor = Object.Instantiate(roomFloorPrefab, position, Quaternion.identity);
-        roomFloor.transform.localScale = new Vector3(width, roomFloor.transform.localScale.y, length);
-
-        roomFloor.layer = LayerMask.NameToLayer("PG_Floor");
+        //  roomFloor.transform.localScale = new Vector3(width, height, length);
+        roomBounds = roomFloor.GetOrAdd<BoxCollider>();
+        roomBounds.size = new Vector3(width, height, length);
+        roomFloor.layer = LayerMask.NameToLayer("PG_Room");
+        
 
         List<Vector3> edges = new List<Vector3>();
         west = new Vector3(position.x - width / 2, 1, position.z); // Left side
@@ -43,11 +53,6 @@ public class Room : MonoBehaviour
                 UnityEngine.Debug.Log(hit.collider.gameObject.name);
                 return;
             }
-        }
-
+        }   
     }
-
-
-
-
 }
