@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class Room
+public class Room : MonoBehaviour
 {
     public Vector3 north, south, east, west;
     public float raycastLength = 75f;
@@ -18,6 +18,7 @@ public class Room
             Debug.LogError("Room floor prefab is null. Cannot create room.");
             return;
         }
+
         GameObject roomFloor = Object.Instantiate(roomFloorPrefab, position, Quaternion.identity);
         roomFloor.transform.localScale = new Vector3(width, roomFloor.transform.localScale.y, length);
 
