@@ -16,12 +16,9 @@ public static class RoomFactory
         return new Room(position, width, height, length, DungeonManager.Instance.roomFloorPrefab);
     }
 
-    public static Room CreateRoom(Vector3 worldSize, int width, int height, int length)
+    public static Room CreateRoom(Vector3 worldPos, int width, int height, int length)
     {
-        int xPos = Random.Range(0, (int)(worldSize.x - width));
-        int zPos = Random.Range(0, (int)(worldSize.z - length));
-        Vector3 position = new Vector3(xPos, 1, zPos);
-        return new Room(position, width, height, length, DungeonManager.Instance.roomFloorPrefab);
+        return new Room(worldPos, width, height, length, DungeonManager.Instance.roomFloorPrefab);
     }
 
     public static Room CreateRoom(Vector3 worldSize, int width, int height, int length, GameObject roomFloorPrefab)

@@ -9,13 +9,14 @@ public class Room : MonoBehaviour
 
     public Room(Vector3 position, int width, int height, int length, GameObject roomFloorPrefab)
     {
-        if (position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Floor"), new Vector3(width, height, length)))
-        {
-            return;
-        }
+        //if (position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Floor"), new Vector3(width, height, length)))
+        //{
+        //    return;
+        //}
 
-        if(position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Room"), new Vector3(width, height, length)))
+        if (position.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Room"), new Vector3(width/2, height/2, length/2)))
         {
+            Debug.Log("Cant produce");
             return;
         }
 

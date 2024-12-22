@@ -288,33 +288,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d7e125729348045ac66b42a430c381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWorldWidth: 5
-  maxWorldWidth: 5
-  minWorldLength: 5
-  maxWorldLength: 5
-  minWorldHeight: 1
-  maxWorldHeight: 1
-  maxNumOfRooms: 100
-  minRoomWidth: 1
-  maxRoomWidth: 1
-  minRoomHeight: 1
-  maxRoomHeight: 1
-  minRoomLength: 1
-  maxRoomLength: 1
-  minNumberOfRooms: 1
-  maxNumberOfRooms: 1
-  minCorridorWidth: 1
-  maxCorridorWidth: 1
-  minCorridorHeight: 1
-  maxCorridorHeight: 1
-  minCorridorLength: 1
-  maxCorridorLength: 1
-  minNumberOfCorridors: 1
-  maxNumberOfCorridors: 1
+  isRandom: 0
+  randMinWorldWidth: 25
+  randMaxWorldWidth: 100
+  randMinWorldLength: 20
+  randMaxWorldLength: 100
+  randMinWorldHeight: 1
+  randMaxWorldHeight: 3
+  randMaxNumOfRooms: 25
+  randMinRoomWidth: 5
+  randMaxRoomWidth: 15
+  randMinRoomHeight: 5
+  randMaxRoomHeight: 15
+  randMinRoomLength: 5
+  randMaxRoomLength: 15
+  randMinNumberOfRooms: 3
+  randMaxNumberOfRooms: 10
+  randMinCorridorWidth: 3
+  randMaxCorridorWidth: 5
+  randMinCorridorHeight: 3
+  randMaxCorridorHeight: 5
+  randMinCorridorLength: 3
+  randMaxCorridorLength: 5
+  randMinNumberOfCorridors: 2
+  randMaxNumberOfCorridors: 5
+  WorldWidth: 100
+  WorldHeight: 1
+  WorldLength: 100
+  NumOfRooms: 192
+  RoomWidth: 1
+  RoomHeight: 1
+  RoomLength: 1
+  CorridorWidth: 1
+  CorridorHeight: 1
+  CorridorLength: 1
   roomFloorPrefab: {fileID: 6422511636382407469, guid: 2692263e8e20ebf41a776b4c1c21fff4,
     type: 3}
   corridorPrefab: {fileID: 1043062095916606608, guid: c67d6e9eae084c7409f79e0554183e58,
     type: 3}
+  rooms: []
 --- !u!4 &1967955817
 Transform:
   m_ObjectHideFlags: 0
