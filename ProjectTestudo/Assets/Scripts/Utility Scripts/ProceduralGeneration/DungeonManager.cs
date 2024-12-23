@@ -39,17 +39,6 @@ public class DungeonManager : MonoBehaviour
     [Range(1, 500)] public int randMaxNumberOfRooms = 10;
     [Space(10)]
 
-
-
-    //[Header("Room Offsets")]
-    //public float xOffset = 0.05f; // Offset between rooms on the X-axis
-    //public float yOffset = 0.05f; // Offset between rooms on the Y-axis
-    //public float zOffset = 0.05f; // Offset between rooms on the Z-axis
-
-
-
-
-
     [Header("World Parameters")]
     [Range(5, 500)] public int WorldWidth = 100;
     [Space(3)]
@@ -68,6 +57,8 @@ public class DungeonManager : MonoBehaviour
     [Range(1, 50)] public int RoomLength = 15;
     [Space(3)]
 
+    [Header("Room Distance")]
+    [Range(0, 5)] public float distanceFactor = 0.5f;
 
 
     [Header("Prefabs")]
@@ -80,6 +71,9 @@ public class DungeonManager : MonoBehaviour
     public List<Corridor> corridors = new List<Corridor>();
 
     private Vector3 currentWorldSize = Vector3.zero;
+
+
+
 
     private void Awake()
     {
@@ -133,7 +127,7 @@ public class DungeonManager : MonoBehaviour
 
     void GenerateGridRoom(Vector3 worldSize, int width, int height, int length)
     {
-        Room room = RoomFactory.CreateRoom(worldSize, width, height, length);
+        Room room = new Room(worldSize, width, height, length, DungeonManager.Instance.roomFloorPrefab);
         if (room != null)
         {
             rooms.Add(room);
@@ -153,13 +147,13 @@ public class DungeonManager : MonoBehaviour
                 for(int j = 0; j < WorldLength; j++)
                 {
                     GenerateGridRoom(currentWorldSize, RoomWidth, RoomHeight, RoomLength);
-                    currentWorldSize = currentWorldSize.Add(z:RoomLength);
+                    currentWorldSize = currentWorldSize.Add(z:(float)RoomLength * distanceFactor);
                 }
                 currentWorldSize = currentWorldSize.WithZ(transform.position.z);
-                currentWorldSize = currentWorldSize.Add(x: RoomWidth);
+                currentWorldSize = currentWorldSize.Add(x:(float)RoomWidth * distanceFactor);
             }
             currentWorldSize = currentWorldSize.WithX(transform.position.x);
-            currentWorldSize = currentWorldSize.Add(y: RoomHeight);
+            currentWorldSize = currentWorldSize.Add(y:(float)RoomHeight * distanceFactor);
 
         }
     }
@@ -204,43 +198,6 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-
-
-
-
-
-    private void OnDrawGizmos()
-    {
-        if (currentWorldSize != Vector3.zero)
-        {
-            Gizmos.color = Color.green;
-
-            // Define corners
-            Vector3 bottomLeft = Vector3.zero;
-            Vector3 bottomRight = new Vector3(currentWorldSize.x, 0, 0);
-            Vector3 topLeft = new Vector3(0, 0, currentWorldSize.z);
-            Vector3 topRight = new Vector3(currentWorldSize.x, 0, currentWorldSize.z);
-
-            // Draw bottom rectangle
-            Gizmos.DrawLine(bottomLeft, bottomRight);
-            Gizmos.DrawLine(bottomRight, topRight);
-            Gizmos.DrawLine(topRight, topLeft);
-            Gizmos.DrawLine(topLeft, bottomLeft);
-
-            // Draw height lines
-            Vector3 heightOffset = new Vector3(0, currentWorldSize.y, 0);
-            Gizmos.DrawLine(bottomLeft, bottomLeft + heightOffset);
-            Gizmos.DrawLine(bottomRight, bottomRight + heightOffset);
-            Gizmos.DrawLine(topLeft, topLeft + heightOffset);
-            Gizmos.DrawLine(topRight, topRight + heightOffset);
-
-            // Draw top rectangle
-            Gizmos.DrawLine(bottomLeft + heightOffset, bottomRight + heightOffset);
-            Gizmos.DrawLine(bottomRight + heightOffset, topRight + heightOffset);
-            Gizmos.DrawLine(topRight + heightOffset, topLeft + heightOffset);
-            Gizmos.DrawLine(topLeft + heightOffset, bottomLeft + heightOffset);
-        }
-    }
 
 
 
