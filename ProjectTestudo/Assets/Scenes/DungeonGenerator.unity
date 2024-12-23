@@ -259,6 +259,62 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &1236340329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1236340331}
+  - component: {fileID: 1236340330}
+  m_Layer: 9
+  m_Name: Grid_DungeonGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1236340330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236340329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29014606ffdd9644a824bfc8b777da46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generate: 1
+  isFinished: 0
+  roomFloorPrefab: {fileID: 6422511636382407469, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+    type: 3}
+  WorldWidth: 5
+  WorldHeight: 1
+  WorldLength: 5
+  NumOfRooms: 0
+  RoomWidth: 1
+  RoomHeight: 1
+  RoomLength: 1
+  distanceFactor: 0
+--- !u!4 &1236340331
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236340329}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -25, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1967955815
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,12 +326,12 @@ GameObject:
   - component: {fileID: 1967955817}
   - component: {fileID: 1967955816}
   m_Layer: 9
-  m_Name: DungeonGenerator
+  m_Name: Random_DungeonGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1967955816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,11 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d7e125729348045ac66b42a430c381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isRandom: 0
-  isFinishedMakingRooms: 0
-  isFinishedRemovingWalls: 0
-  isFinishedCheckingPaths: 0
-  isFinishedAdjustingRooms: 0
+  generate: 0
   isFinished: 0
   randMinWorldWidth: 25
   randMaxWorldWidth: 55
@@ -309,14 +361,6 @@ MonoBehaviour:
   randMaxRoomLength: 15
   randMinNumberOfRooms: 3
   randMaxNumberOfRooms: 10
-  WorldWidth: 5
-  WorldHeight: 1
-  WorldLength: 5
-  NumOfRooms: 200
-  RoomWidth: 1
-  RoomHeight: 1
-  RoomLength: 1
-  distanceFactor: 1
   roomFloorPrefab: {fileID: 6422511636382407469, guid: 2692263e8e20ebf41a776b4c1c21fff4,
     type: 3}
   corridorPrefab: {fileID: 1043062095916606608, guid: c67d6e9eae084c7409f79e0554183e58,
@@ -330,7 +374,7 @@ Transform:
   m_GameObject: {fileID: 1967955815}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 25, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -566,4 +610,5 @@ SceneRoots:
   - {fileID: 711856342}
   - {fileID: 2037097662}
   - {fileID: 1967955817}
+  - {fileID: 1236340331}
   - {fileID: 2033307992}
