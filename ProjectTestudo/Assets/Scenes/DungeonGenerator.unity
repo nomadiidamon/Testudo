@@ -309,13 +309,14 @@ MonoBehaviour:
   randMaxRoomLength: 15
   randMinNumberOfRooms: 3
   randMaxNumberOfRooms: 10
-  WorldWidth: 10
+  WorldWidth: 5
   WorldHeight: 1
-  WorldLength: 10
+  WorldLength: 5
   NumOfRooms: 200
   RoomWidth: 1
   RoomHeight: 1
   RoomLength: 1
+  distanceFactor: 1
   roomFloorPrefab: {fileID: 6422511636382407469, guid: 2692263e8e20ebf41a776b4c1c21fff4,
     type: 3}
   corridorPrefab: {fileID: 1043062095916606608, guid: c67d6e9eae084c7409f79e0554183e58,

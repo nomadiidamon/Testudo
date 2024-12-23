@@ -187,6 +187,31 @@ public static class GameObjectExtensions
     }
 
 
+    public static void ScaleNonStaticChildrenWithMesh(this GameObject parent, Vector3 scale, bool includeParent = false)
+    {
+        if (parent == null)
+        {
+            Debug.LogError("Parent GameObject is null.");
+            return;
+        }
+
+        // Scale the children that are non-static and have a MeshFilter.
+        foreach (Transform child in parent.transform)
+        {
+            if (!child.gameObject.isStatic && child.GetComponent<MeshFilter>() != null)
+            {
+                child.localScale = Vector3.Scale(child.localScale, scale);
+            }
+        }
+
+        // Optionally scale the parent if it's non-static and meets the criteria.
+        if (includeParent && !parent.isStatic && parent.GetComponent<MeshFilter>() != null)
+        {
+            parent.transform.localScale = Vector3.Scale(parent.transform.localScale, scale);
+        }
+    }
+
+
     /// <summary>
     /// Gets all colliders attached to a GameObject and its children as an array.
     /// </summary>

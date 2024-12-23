@@ -147,14 +147,20 @@ public class DungeonManager : MonoBehaviour
                 for(int j = 0; j < WorldLength; j++)
                 {
                     GenerateGridRoom(currentWorldSize, RoomWidth, RoomHeight, RoomLength);
-                    currentWorldSize = currentWorldSize.Add(z:(float)RoomLength * distanceFactor);
+                    currentWorldSize = currentWorldSize.Add(z:1 * distanceFactor);
                 }
                 currentWorldSize = currentWorldSize.WithZ(transform.position.z);
-                currentWorldSize = currentWorldSize.Add(x:(float)RoomWidth * distanceFactor);
+                currentWorldSize = currentWorldSize.Add(x:1 * distanceFactor);
             }
             currentWorldSize = currentWorldSize.WithX(transform.position.x);
-            currentWorldSize = currentWorldSize.Add(y:(float)RoomHeight * distanceFactor);
+            currentWorldSize = currentWorldSize.Add(y:1 * distanceFactor);
 
+        }
+
+        foreach (Room room in rooms)
+        {
+            if (room.roomFloor != null)
+                room.roomFloor.transform.position.Add(y: RoomHeight / 2);
         }
     }
 
