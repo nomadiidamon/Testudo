@@ -1,16 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static CameraManager instance;
+    public Camera mainCamera;
+    public CinemachineBrain brain;
+
+    [Header("Player Camera")]
+    public CinemachineVirtualCamera playerCamera;
+    public Transform playerTransform;
+
+
+
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         
