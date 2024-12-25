@@ -68,28 +68,16 @@ public class Room
                 {
                     // wall objects to control which is active and which is not
                     case "PG_Wall_North":
-                        northWall.myWall = objects[i];
-                        northWall.myPosition = Top_Middle.position;
-                        walls.Add(northWall);
-                        wallsToLocation.Add(northWall.myTransform.position, northWall);
+                        InitializeWall(objects[i], Top_Middle.position, northWall, "PG_Wall_North");
                         break;
                     case "PG_Wall_South":
-                        southWall.myWall = objects[i];
-                        southWall.myTransform.position = Bottom_Middle.position;
-                        walls.Add(southWall);
-                        wallsToLocation.Add(southWall.myTransform.position, southWall);
+                        InitializeWall(objects[i], Bottom_Middle.position, southWall, "PG_Wall_South");
                         break;
                     case "PG_Wall_East":
-                        eastWall.myWall = objects[i];
-                        eastWall.myTransform.position = Right_Middle.position;
-                        walls.Add(eastWall);
-                        wallsToLocation.Add(eastWall.myTransform.position, eastWall);
+                        InitializeWall(objects[i], Right_Middle.position, eastWall, "PG_Wall_East");
                         break;
                     case "PG_Wall_West":
-                        westWall.myWall = objects[i];
-                        westWall.myTransform.position = Left_Middle.position;
-                        walls.Add(westWall);
-                        wallsToLocation.Add(westWall.myTransform.position, westWall);
+                        InitializeWall(objects[i], Left_Middle.position, westWall, "PG_Wall_West");
                         break;
 
                     //corners for future reference
@@ -128,4 +116,21 @@ public class Room
         roomFloor.layer = LayerMask.NameToLayer("PG_Room");
         roomBounds.gameObject.layer = LayerMask.NameToLayer("PG_Room");
     }
+
+
+    private void InitializeWall(GameObject wallObject, Vector3 position, Wall wall, string wallName)
+    {
+        if (wallObject == null)
+        {
+            Debug.LogError($"{wallName} is missing in the prefab.");
+            return;
+        }
+
+        wall.myWall = wallObject;
+        wall.myPosition = position;
+        wall.myTransform = wallObject.transform;
+        walls.Add(wall);
+        wallsToLocation[position] = wall;
+    }
+
 }

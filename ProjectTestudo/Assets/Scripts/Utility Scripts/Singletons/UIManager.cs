@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,7 +9,11 @@ public class UIManager : MonoBehaviour
     Canvas[] canvases;
 
     public Canvas currentCanvas;
-    public Canvas generalUICanvas;
+    public Canvas pauseCanvas;
+    public Canvas otherCanvas;
+
+    public bool isPaused = false;
+
 
     // Ability Menu
     // Map Menu
@@ -34,7 +37,7 @@ public class UIManager : MonoBehaviour
                 switch (canvases[i].name)
                 {
                     case "General_UI_Canvas":
-                        generalUICanvas = canvases[i];
+                        pauseCanvas = canvases[i];
                         break;
 
                     case "AbilityMenu":
@@ -56,28 +59,38 @@ public class UIManager : MonoBehaviour
         
     }
 
-
-
-    public void Pause()
+    public void OnPause(InputAction.CallbackContext context)
     {
-
+        if (context.performed) // Ensure it only triggers once per press
+        {
+            TogglePause();
+        }
     }
 
-    public void Resume()
+    private void TogglePause()
     {
-
+        if (isPaused)
+        {
+            Time.timeScale = 1;
+            isPaused = false;
+            currentCanvas.DisableCanvas();
+            currentCanvas = pauseCanvas;
+            currentCanvas.EnableCanvas();
+        }
+        else
+        {
+            Time.timeScale = 0;
+            isPaused = true;
+            currentCanvas.DisableCanvas();
+            currentCanvas = otherCanvas;
+            currentCanvas.EnableCanvas();
+        }
     }
 
-    public void Restart()
+    private void OnEnable()
     {
-
+        Time.timeScale = 1;
     }
-
-    public void Quit()
-    {
-
-    }
-
 
 
     public void Load()

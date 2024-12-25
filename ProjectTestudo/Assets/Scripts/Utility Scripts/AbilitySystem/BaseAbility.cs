@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public abstract class BaseAbility : IAbility
 {
     public abstract string AbilityName { get; }
-    public List<IStateCondition> Conditions { get; private set; }
+    public List<IStateACondition> Conditions { get; private set; }
     public bool isActive = false; // Tracks whether the ability is currently active
     public bool isReady = false; // Tracks whether the ability is ready to activate
     public bool IsEnabled { get; private set; } = true; // Tracks whether the ability is enabled
@@ -16,7 +16,7 @@ public abstract class BaseAbility : IAbility
 
     protected BaseAbility()
     {
-        Conditions = new List<IStateCondition>();
+        Conditions = new List<IStateACondition>();
     }
 
     // Check whether or not the ability is active
