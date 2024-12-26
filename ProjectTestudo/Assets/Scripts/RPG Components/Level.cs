@@ -1,6 +1,6 @@
-﻿using System;
+﻿using UnityEngine;
 
-public class Level
+public class Level : MonoBehaviour
 {   
     private int levelValue {  get;  set; }
     private int currentExperience { get; set; }
