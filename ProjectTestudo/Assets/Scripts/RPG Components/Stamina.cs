@@ -69,11 +69,15 @@ public class Stamina : Stat, IRegenerable
         }
     }
 
+    // possibly change the parameter to an Action or Func delegate
     public bool Stun(float time = 0.475f)
     {
         isStunned = true;
-        // Stun the player for a certain amount of time, then return to normal
-        // possibly change the parameter to an Action or Func delegate
+        // Stun the player
+
+        // Wait the presecribed amount of time
+
+        // Unstun the player
         isStunned = false;
 
         return true;

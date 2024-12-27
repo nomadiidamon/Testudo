@@ -1,0 +1,7 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+[System.Serializable]
+public enum DamageType { PHYSICAL_PIERCING, PHYSICAL_SLASHING, PHYSICAL_BLUNT, MAGIC_FIRE, MAGIC_LAVA, MAGIC_METAL, MAGIC_EARTH, MAGIC_WATER, MAGIC_ICE, MAGIC_AIR, MAGIC_ELECTRICITY, MAGIC_GRAVITY, NULL }
+
