@@ -8,36 +8,36 @@ public class GridDungeonManager : MonoBehaviour
     public static GridDungeonManager Instance { get; private set; } // Singleton instance
     public bool generate = false;
     public bool isFinished = false;
+    public bool isFinishedMakingRooms = false;
+    public bool dungeonIsPathable = false;
+
 
 
     [Header("Prefabs")]
-    public GameObject roomFloorPrefab; 
+    public GameObject roomFloorPrefab;
+    public GameObject roomDoorPrefab;
     [Space(10)]
 
     [Header("World Parameters")]
-    [Range(5, 500)] public int WorldWidth = 100;
-    [Space(3)]
+    [Range(1, 500)] public int WorldWidth = 100;
     [Range(1, 500)] public int WorldHeight = 5;
-    [Space(3)]
-    [Range(5, 500)] public int WorldLength = 100;
-    [Space(3)]
+    [Range(1, 500)] public int WorldLength = 100;
     public int NumOfRooms = 0;
     [Space(10)]
 
     [Header("Room Parameters")]
     [Range(1, 50)] public int RoomWidth = 15;
-    [Space(3)]
     [Range(1, 50)] public int RoomHeight = 15;
-    [Space(3)]
     [Range(1, 50)] public int RoomLength = 15;
-    [Space(3)]
+    [Space(10)]
 
     [Header("Room Distance")]
     [Range(0, 5)] public float distanceFactor = 0.5f;
 
     [Header("Collections")]
     public List<Room> rooms = new List<Room>();
-    public List<Corridor> corridors = new List<Corridor>();
+    public List<Wall> walls = new List<Wall>();
+    public List<Wall> boundaryWalls = new List<Wall>();
 
     private Vector3 currentWorldSize = Vector3.zero;
 
@@ -50,29 +50,41 @@ public class GridDungeonManager : MonoBehaviour
         {
             Instance = this;
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
         NumOfRooms = WorldWidth * WorldLength;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!isFinished)
         {
             if (rooms.Count >= NumOfRooms)
             {
-                isFinished = true;
-                return;
+                isFinishedMakingRooms = true;
             }
-            GenerateGridDungeon();
+            else
+            {
+                GenerateGridDungeon();
+                SetWorldBoundaries();
+            }
 
-        }
-        else
-        {
-            // 
+            if (isFinishedMakingRooms)
+            {
+                CheckPaths();
+
+                if (!IsPathable())
+                {
+                    RemoveWalls();
+
+                }
+            }
+
+
+
+
         }
     }
 
@@ -82,12 +94,18 @@ public class GridDungeonManager : MonoBehaviour
         GenerateGridOfRooms();
     }
 
-    void GenerateGridRoom(Vector3 worldSize, int width, int height, int length)
+    void GenerateGridRoom(Vector3 position, int width, int height, int length)
     {
-        Room room = new Room(worldSize, width, height, length, roomFloorPrefab);
+        GameObject roomObject = Instantiate(roomFloorPrefab, position, Quaternion.identity);
+        Room room = roomObject.GetComponent<Room>();
         if (room != null)
         {
+            room.roomBounds.size = new Vector3(width, height, length);
             rooms.Add(room);
+            walls.Add(room.northWall);
+            walls.Add(room.eastWall);
+            walls.Add(room.southWall);
+            walls.Add(room.westWall);
         }
     }
 
@@ -95,14 +113,18 @@ public class GridDungeonManager : MonoBehaviour
     {
         currentWorldSize = transform.position;
 
-        for (int h = 0; h < WorldHeight + 1; h++)
+        for (int h = 0; h < WorldHeight; h++)
         {
 
-            for (int i = 0; i < WorldWidth + 1; i++)
+            for (int i = 0; i < WorldWidth; i++)
             {
 
-                for (int j = 0; j < WorldLength + 1; j++)
+                for (int j = 0; j < WorldLength; j++)
                 {
+                    if (currentWorldSize.HasObjectWithLayerInBox(LayerMask.NameToLayer("PG_Room"), new Vector3(RoomLength / 2, RoomWidth / 2, RoomHeight / 2)))
+                    {
+                        continue;
+                    }
                     GenerateGridRoom(currentWorldSize, RoomWidth, RoomHeight, RoomLength);
                     currentWorldSize = currentWorldSize.Add(z: 1 * distanceFactor);
                 }
@@ -114,10 +136,50 @@ public class GridDungeonManager : MonoBehaviour
 
         }
 
-        foreach (Room room in rooms)
+    }
+
+    public void SetWorldBoundaries()
+    {
+        for (int i = 0; i < walls.Count; i++)
         {
-            if (room.roomFloor != null)
-                room.roomFloor.transform.position.Add(y: RoomHeight / 2);
+            walls[i].IsBoundary();
+        }
+
+        for (int i = 0; i < walls.Count; i++)
+        {
+            if (walls[i].iAmBoundaryWall)
+            {
+                boundaryWalls.Add(walls[i]);
+                walls[i].gameObject.SetMaterialColor(Color.white);
+            }
         }
     }
+
+    public void RemoveWalls()
+    {
+        //randomly deactivate walls
+    }
+
+    public void CheckPaths()
+    {
+        // Test dungeon for pathing
+
+        //if traversable set dungeonIsPathable to true
+
+        // otherwise set it to false and call remove walls again
+    }
+
+    public bool IsPathable()
+    {
+        if (dungeonIsPathable)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
 }

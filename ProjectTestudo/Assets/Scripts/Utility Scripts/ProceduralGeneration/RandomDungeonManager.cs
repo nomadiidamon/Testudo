@@ -74,7 +74,7 @@ public class RandomDungeonManager : MonoBehaviour
                 isFinished = true;
                 return;
             }
-            GenerateRandomDungeon();
+            //GenerateRandomDungeon();
             
 
         }
@@ -86,47 +86,47 @@ public class RandomDungeonManager : MonoBehaviour
 
 
 
-    void GenerateRandomRoom(Vector3 worldSize)
-    {
-        Room room = RoomFactory.CreateRandomRoom(worldSize, randMinRoomWidth, randMaxRoomWidth, randMinRoomHeight, randMaxRoomHeight, randMinRoomLength, randMaxRoomLength);
-        if (room != null)
-        {
-            rooms.Add(room);
-        }
+    //void GenerateRandomRoom(Vector3 worldSize)
+    //{
+    //    Room room = RoomFactory.CreateRandomRoom(worldSize, randMinRoomWidth, randMaxRoomWidth, randMinRoomHeight, randMaxRoomHeight, randMinRoomLength, randMaxRoomLength);
+    //    if (room != null)
+    //    {
+    //        rooms.Add(room);
+    //    }
+    //}
+
+    //public void GenerateRandomRooms()
+    //{
+    //    int worldWidth = UnityEngine.Random.Range(randMinWorldWidth, randMaxWorldWidth);
+    //    int worldLength = UnityEngine.Random.Range(randMinWorldLength, randMaxWorldLength);
+    //    int worldHeight = UnityEngine.Random.Range(randMinWorldHeight, randMaxWorldHeight);
+    //    Vector3 worldSize = new Vector3(worldWidth, worldHeight, worldLength);
+    //    currentWorldSize = worldSize;
+    //    int numberOfRooms = worldWidth * worldLength;
+    //    for (int i = 0; i < numberOfRooms; i++)
+    //    {
+    //        GenerateRandomRoom(currentWorldSize);
+    //    }
+
     }
 
-    public void GenerateRandomRooms()
-    {
-        int worldWidth = UnityEngine.Random.Range(randMinWorldWidth, randMaxWorldWidth);
-        int worldLength = UnityEngine.Random.Range(randMinWorldLength, randMaxWorldLength);
-        int worldHeight = UnityEngine.Random.Range(randMinWorldHeight, randMaxWorldHeight);
-        Vector3 worldSize = new Vector3(worldWidth, worldHeight, worldLength);
-        currentWorldSize = worldSize;
-        int numberOfRooms = worldWidth * worldLength;
-        for (int i = 0; i < numberOfRooms; i++)
-        {
-            GenerateRandomRoom(currentWorldSize);
-        }
+//    public void GenerateRandomDungeon()
+//    {
+//        int worldWidth = UnityEngine.Random.Range(randMinWorldWidth, randMaxWorldWidth);
+//        int worldLength = UnityEngine.Random.Range(randMinWorldLength, randMaxWorldLength);
+//        int worldHeight = UnityEngine.Random.Range(randMinWorldHeight, randMaxWorldHeight);
 
-    }
-
-    public void GenerateRandomDungeon()
-    {
-        int worldWidth = UnityEngine.Random.Range(randMinWorldWidth, randMaxWorldWidth);
-        int worldLength = UnityEngine.Random.Range(randMinWorldLength, randMaxWorldLength);
-        int worldHeight = UnityEngine.Random.Range(randMinWorldHeight, randMaxWorldHeight);
-
-        Vector3 worldSize = new Vector3(worldWidth, worldHeight, worldLength);
-        currentWorldSize = worldSize;
-        int numberOfRooms = UnityEngine.Random.Range(randMinNumberOfRooms, randMaxNumberOfRooms);
-        for (int i = 0; i < numberOfRooms; i++)
-        {
-            GenerateRandomRoom(currentWorldSize);
-        }
-    }
+//        Vector3 worldSize = new Vector3(worldWidth, worldHeight, worldLength);
+//        currentWorldSize = worldSize;
+//        int numberOfRooms = UnityEngine.Random.Range(randMinNumberOfRooms, randMaxNumberOfRooms);
+//        for (int i = 0; i < numberOfRooms; i++)
+//        {
+//            GenerateRandomRoom(currentWorldSize);
+//        }
+//    }
 
 
 
 
-}
+//}
 

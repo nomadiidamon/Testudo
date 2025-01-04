@@ -290,8 +290,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   generate: 1
   isFinished: 0
-  roomFloorPrefab: {fileID: 6422511636382407469, guid: 2692263e8e20ebf41a776b4c1c21fff4,
+  isFinishedMakingRooms: 0
+  dungeonIsPathable: 0
+  roomFloorPrefab: {fileID: 6574546411225406167, guid: 2692263e8e20ebf41a776b4c1c21fff4,
     type: 3}
+  roomDoorPrefab: {fileID: 0}
   WorldWidth: 5
   WorldHeight: 1
   WorldLength: 5
@@ -299,7 +302,10 @@ MonoBehaviour:
   RoomWidth: 1
   RoomHeight: 1
   RoomLength: 1
-  distanceFactor: 0
+  distanceFactor: 1
+  rooms: []
+  walls: []
+  boundaryWalls: []
 --- !u!4 &1236340331
 Transform:
   m_ObjectHideFlags: 0
@@ -365,6 +371,7 @@ MonoBehaviour:
     type: 3}
   corridorPrefab: {fileID: 1043062095916606608, guid: c67d6e9eae084c7409f79e0554183e58,
     type: 3}
+  rooms: []
 --- !u!4 &1967955817
 Transform:
   m_ObjectHideFlags: 0

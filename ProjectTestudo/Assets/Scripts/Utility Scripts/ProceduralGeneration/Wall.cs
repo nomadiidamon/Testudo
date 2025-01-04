@@ -1,49 +1,48 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-public class Wall 
+public class Wall : MonoBehaviour
 {
-	public GameObject myWall;
-    public Vector3 myPosition;
-    public Transform myTransform;
     public bool isActive = true;
-    private string direction = "";
+    public bool iAmBoundaryWall = false;
+    public List<Collider> myContacts = new List<Collider>();
 
-    public Wall() 
-    {    
-        myWall = null;
-        myPosition = Vector3.zero;
-        myTransform = null;
-    }
 
-    public Wall(Vector3 pos, GameObject obj)
+    public void Start()
     {
-        this.myWall = obj;
-        this.myPosition = pos;
-        this.direction = obj.name;
-        this.myTransform = obj.transform;
     }
 
 
     public void SetActive(bool active) { isActive = active; }
 
-    public string GetName() { return direction; }
-    public void SetDirection(string direction)
+    public bool IsBoundary()
     {
-        this.direction = direction;
-    }
+        BoxCollider coll = GetComponent<BoxCollider>();
+        int layer = LayerMask.NameToLayer("PG_Wall");
 
-    public void Deactivate() { isActive = false; }
-    public void Activate() { isActive = true; }
-
-    public void DeleteSelf()
-    {
-        if (myWall != null && !isActive)
+        if (coll != null)
         {
-            UnityEngine.Object.Destroy(myWall);
+            Collider[] colliders = Physics.OverlapBox(coll.bounds.center, coll.bounds.extents, Quaternion.identity, 1 << layer);
+
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i] != coll)
+                {
+                    myContacts.Add(colliders[i]);
+                }
+            }
+
+            if (myContacts.Count > 6)
+            {
+                iAmBoundaryWall = false;
+            }
+            else
+            {
+                iAmBoundaryWall = true;
+            }
         }
+        return iAmBoundaryWall;
     }
-
-
-    
 
 }

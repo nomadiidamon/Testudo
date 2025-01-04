@@ -2,135 +2,159 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class Room
+public class Room : MonoBehaviour
 {
-    public BoxCollider roomBounds;
-    public Vector3 center;
-    public Wall northWall = new Wall();
-    public Wall southWall = new Wall();
-    public Wall eastWall = new Wall();
-    public Wall westWall = new Wall();
+    [SerializeField] public BoxCollider roomBounds;
+    [SerializeField] public Vector3 center;
+    [SerializeField] public GameObject roomFloor;
+    [SerializeField] public Wall northWall, southWall, eastWall, westWall;
+    [SerializeField] public Transform Top_Middle, Bottom_Middle, Left_Middle, Right_Middle;
+    [SerializeField] public float wallRayDistance = 5f; // Adjustable raycast distance
 
-    //public Wall northWall, southWall, eastWall, westWall;
+    public bool IsBoundaryRoom { get; private set; } = false;
 
-    public GameObject northEast, southEast, southWest, northWest;
-    public GameObject roomFloor;
 
-    public List<Wall> walls = new List<Wall>();
-    public Dictionary<Vector3, Wall> wallsToLocation = new Dictionary<Vector3, Wall>();
-
-    public Transform Top_Middle, Bottom_Middle, Left_Middle, Right_Middle;
-
-    /// <summary>
-    ///                                     All Room variables are initialized here,
-    ///                                 ***THEY ARE ALSO RELATIVE TO THE FLOOR OBJECT ***     
-    ///                                     Floor should have an opposite side for cieling
-    /// </summary>
-    /// <param name="position"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="length"></param>
-    /// <param name="roomFloorPrefab"></param>
-    public Room(Vector3 position, int width, int height, int length, GameObject roomFloorPrefab)
+    public void Start()
     {
-
-        if (roomFloorPrefab == null)
+        if (roomFloor == null)
         {
             Debug.LogError("Room floor prefab is null. Cannot create room.");
             return;
         }
-
-        GameObject roomFloor = Object.Instantiate(roomFloorPrefab, position, Quaternion.identity);
-        roomBounds = roomFloor.GetOrAdd<BoxCollider>();
-        roomBounds.size = new Vector3(width, height, length);
-        roomFloor.ScaleNonStaticChildrenWithMesh(new Vector3(width, height, length));
-        center = new Vector3(roomBounds.bounds.center.x, roomBounds.bounds.center.y, roomBounds.bounds.center.z);
-
-        Top_Middle = roomFloor.FindChildByName("Top_Middle").GetOrAdd<Transform>();
-        Bottom_Middle = roomFloor.FindChildByName("Bottom_Middle").GetOrAdd<Transform>();
-        Left_Middle = roomFloor.FindChildByName("Left_Middle").GetOrAdd<Transform>();
-        Right_Middle = roomFloor.FindChildByName("Right_Middle").GetOrAdd<Transform>();
-
-        Top_Middle.position = roomBounds.bounds.center + new Vector3(0, 0, roomBounds.size.z / 2);
-        Bottom_Middle.position = roomBounds.bounds.center - new Vector3(0, 0, roomBounds.size.z / 2);
-        Left_Middle.position = roomBounds.bounds.center - new Vector3(roomBounds.size.x / 2, 0, 0);
-        Right_Middle.position = roomBounds.bounds.center + new Vector3(roomBounds.size.x / 2, 0, 0);
-
-        // get all the positions of the children that have the name "PG_Wall"
-        List<GameObject> objects = roomFloor.transform.GetAllChildren();
-
-        for (int i = 0; i < objects.Count; i++)
+        
+        roomBounds = GetComponent<BoxCollider>();
+        if (roomBounds == null)
         {
-            if (objects[i] != null)
-            {
-
-                switch (objects[i].name)
-                {
-                    // wall objects to control which is active and which is not
-                    case "PG_Wall_North":
-                        InitializeWall(objects[i], Top_Middle.position, northWall, "PG_Wall_North");
-                        break;
-                    case "PG_Wall_South":
-                        InitializeWall(objects[i], Bottom_Middle.position, southWall, "PG_Wall_South");
-                        break;
-                    case "PG_Wall_East":
-                        InitializeWall(objects[i], Right_Middle.position, eastWall, "PG_Wall_East");
-                        break;
-                    case "PG_Wall_West":
-                        InitializeWall(objects[i], Left_Middle.position, westWall, "PG_Wall_West");
-                        break;
-
-                    //corners for future reference
-                    case "Top_RightCorner":
-                        northEast = objects[i];
-                        northEast.transform.position = Top_Middle.position + Right_Middle.position;
-                        break;
-                    case "Bottom_RightCorner":
-                        southEast = objects[i];
-                        southEast.transform.position = Bottom_Middle.position + Right_Middle.position;
-                        break;
-                    case "Bottom_LeftCorner":
-                        southWest = objects[i];
-                        southWest.transform.position = Bottom_Middle.position + Left_Middle.position;
-                        break;
-                    case "Top_LeftCorner":
-                        northWest = objects[i];
-                        northWest.transform.position = Top_Middle.position + Left_Middle.position;
-                        break;
-
-
-                    // floor object to control the position of the floor
-                    case "PG_Floor":
-                        roomFloor = objects[i];
-                        roomFloor.transform.position = roomFloor.transform.position;
-                        break;
-
-                    default:
-                        break;
-                }
-
-            }
+            Debug.LogError("BoxCollider is missing on the Room GameObject.");
+            return;
         }
+        center = roomBounds.center;
+        //CheckBoundaryWalls();
+    }
 
-
-        roomFloor.layer = LayerMask.NameToLayer("PG_Room");
-        roomBounds.gameObject.layer = LayerMask.NameToLayer("PG_Room");
+    public Room(Vector3 position, int width, int height, int length, GameObject roomPrefab)
+    {
+        GameObject roomObject = Object.Instantiate(roomPrefab, position, Quaternion.identity);
+        Room room = roomObject.GetComponent<Room>();
+        room.roomBounds.size = new Vector3(width, height, length);
     }
 
 
-    private void InitializeWall(GameObject wallObject, Vector3 position, Wall wall, string wallName)
+
+    /// <summary>
+    /// Sets up the room dimensions and other properties.
+    /// </summary>
+    /// <param name="size">The size of the room.</param>
+    public void InitializeRoom(Vector3 size, bool isBoundaryRoom)
     {
-        if (wallObject == null)
+        if (roomBounds == null)
         {
-            Debug.LogError($"{wallName} is missing in the prefab.");
+            Debug.LogError("BoxCollider is missing on the Room GameObject.");
             return;
         }
 
-        wall.myWall = wallObject;
-        wall.myPosition = position;
-        wall.myTransform = wallObject.transform;
-        walls.Add(wall);
-        wallsToLocation[position] = wall;
+        roomBounds.size = size;
+        center = roomBounds.center;
+        IsBoundaryRoom = isBoundaryRoom;
     }
+
+
+
+    /// <summary>
+    /// Factory method to create a Room instance.
+    /// </summary>
+    /// <param name="position">The position of the room.</param>
+    /// <param name="size">The size of the room.</param>
+    /// <param name="roomPrefab">The room prefab.</param>
+    /// <param name="isBoundaryRoom">Indicates if this room is a boundary room.</param>
+    /// <returns>A new Room instance.</returns>
+    public static Room CreateRoom(Vector3 position, Vector3 size, GameObject roomPrefab, bool isBoundaryRoom)
+    {
+        if (roomPrefab == null)
+        {
+            Debug.LogError("Room prefab is null.");
+            return null;
+        }
+
+        GameObject roomObject = Instantiate(roomPrefab, position, Quaternion.identity);
+        Room room = roomObject.GetComponent<Room>();
+
+        if (room == null)
+        {
+            Debug.LogError("The provided prefab does not have a Room component.");
+            Destroy(roomObject);
+            return null;
+        }
+
+        room.InitializeRoom(size, isBoundaryRoom);
+        return room;
+    }
+
+
+
+    ///// <summary>
+    ///// Checks each wall to determine if it is a boundary wall.
+    ///// </summary>
+    //public void CheckBoundaryWalls()
+    //{
+    //    if (northWall != null) CheckBoundaryWall(northWall);
+    //    if (southWall != null) CheckBoundaryWall(southWall);
+    //    if (eastWall != null) CheckBoundaryWall(eastWall);
+    //    if (westWall != null) CheckBoundaryWall(westWall);
+    //}
+
+
+
+    ///// <summary>
+    ///// Checks if a specific wall is a boundary wall by performing a raycast.
+    ///// </summary>
+    ///// <param name="wall">The wall to check.</param>
+    //private void CheckBoundaryWall(Wall wall)
+    //{
+
+    //    //Use the wall's transform.forward to determine the outward direction
+    //    Vector3 rayOrigin = wall.transform.position;
+    //    Vector3 rayDirection = Vector3.zero;
+
+    //    if (wall == northWall)
+    //    {
+    //        rayDirection = wall.transform.forward; // Outward from the north wall
+    //    }
+    //    else if (wall == southWall)
+    //    {
+    //        rayDirection = -wall.transform.forward; // Outward from the south wall
+    //    }
+    //    else if (wall == eastWall)
+    //    {
+    //        rayDirection = wall.transform.right; // Outward from the east wall
+    //    }
+    //    else if (wall == westWall)
+    //    {
+    //        rayDirection = -wall.transform.right; // Outward from the west wall
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("Wall is not assigned to any expected variable. Skipping.");
+    //        return;
+    //    }
+
+
+    //    // Perform the raycast in the outward direction
+    //    if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, wallRayDistance))
+    //    {
+    //        Debug.Log($"{wall.name} has a neighbor detected by raycast.");
+    //        wall.iAmBoundaryWall = false;
+    //    }
+    //    else
+    //    {
+    //        Debug.Log($"{wall.name} does not have a neighbor and is marked as a boundary wall.");
+    //        wall.iAmBoundaryWall = true;
+    //    }
+
+    //    // Debug ray for visualization in the scene view
+    //    Debug.DrawLine(rayOrigin, rayDirection * wallRayDistance, Color.red, 100);
+
+
+    //}
 
 }
