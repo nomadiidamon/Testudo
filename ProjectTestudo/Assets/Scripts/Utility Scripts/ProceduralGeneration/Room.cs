@@ -8,12 +8,11 @@ public class Room : MonoBehaviour
     [SerializeField] public Vector3 center;
     [SerializeField] public GameObject roomFloor;
     [SerializeField] public Wall northWall, eastWall, southWall, westWall;
-    public List<Wall> walls = new List<Wall>(); 
+    public List<Wall> walls = new List<Wall>();
     [SerializeField] public Transform Top_Middle, Bottom_Middle, Left_Middle, Right_Middle;
     private int numOfActiveWalls = 4;
     private int numOfWalls = 4;
     public int boundaryWalls = 0;
-
     public bool IsBoundaryRoom { get; private set; } = false;
     public bool IsNextToBoundaryRoom { get; private set; }
 
@@ -25,7 +24,7 @@ public class Room : MonoBehaviour
             Debug.LogError("Room floor prefab is null. Cannot create room.");
             return;
         }
-        
+
         roomBounds = GetComponent<BoxCollider>();
         if (roomBounds == null)
         {
@@ -39,7 +38,7 @@ public class Room : MonoBehaviour
         southWall.myNumber = 3;
         westWall.myNumber = 4;
 
-       
+
 
         // Assigning this room to each of the present room's walls
         // North Wall
@@ -89,9 +88,25 @@ public class Room : MonoBehaviour
         // marked as a boundary room as well
         CountBoundaryWalls();
 
-        
+        for (int i = 0; i < walls.Count; i++)
+        {
+            if (walls[i].iAmBoundaryWall)
+            {
+                for (int j = 0; j < walls[i].myContacts.Count; j++)
+                {
+                    if (walls[i].myContacts[j].transform == walls[i].transform)
+                    {
+                        var wall = walls[i].myContacts[j].GetComponent<Wall>();
+                        if (wall != null)
+                        { wall.Destroy(); }
+                    }
+                }
 
+                walls.RemoveAt(i);
+            }
+        }
     }
+
 
     public Room(Vector3 position, int width, int height, int length, GameObject roomPrefab)
     {
@@ -153,83 +168,346 @@ public class Room : MonoBehaviour
 
     public void DisableWall(int wallID)
     {
-        if (wallID == 0)
+        if (wallID == 16)
         {
-            northWall.Destroy();
-            eastWall.Destroy();
-            southWall.Destroy();
-            westWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
+
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
+
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
         }
         else if (wallID == 1)
         {
-            northWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
         }
         else if (wallID == 2)
         {
-            eastWall.Destroy();
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
         }
         else if (wallID == 3)
         {
-            southWall.Destroy();
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
         }
         else if (wallID == 4)
         {
-            westWall.Destroy();
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
         }
         else if (wallID == 5)
         {
-            northWall.Destroy();
-            westWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
+
+
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
         }
         else if (wallID == 6)
         {
-            eastWall.Destroy();
-            southWall.Destroy();
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
+
+
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
         }
         else if (wallID == 7)
         {
-            southWall.Destroy();
-            westWall.Destroy();
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
+
+
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
         }
         else if (wallID == 8)
         {
-            northWall.Destroy();
-            eastWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
+
+
+
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
 
         }
         else if (wallID == 9)
         {
-            eastWall.Destroy();
-            westWall.Destroy();
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
+
+
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
         }
         else if (wallID == 10)
         {
-            northWall.Destroy();
-            southWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
+
+
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
         }
         else if (wallID == 11)
         {
-            northWall.Destroy();
-            southWall.Destroy();
-            eastWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
+
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
+
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
+
+
         }
         else if (wallID == 12)
         {
-            northWall.Destroy();
-            southWall.Destroy();
-            westWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
+
+
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
+
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
         }
         else if (wallID == 13)
         {
-            southWall.Destroy();
-            eastWall.Destroy();
-            westWall.Destroy();
+            if (southWall != null && !southWall.iAmBoundaryWall)
+            {
+                if (southWall.siblingWall != null)
+                {
+                    Destroy(southWall.siblingWall);
+                }
+                southWall.Destroy();
+            }
+
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
+
+
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
         }
         else if (wallID == 14)
         {
-            northWall.Destroy();
-            westWall.Destroy();
-            eastWall.Destroy();
+            if (northWall != null && !northWall.iAmBoundaryWall)
+            {
+                if (northWall.siblingWall != null)
+                {
+                    Destroy(northWall.siblingWall);
+                }
+                northWall.Destroy();
+            }
+
+
+
+            if (westWall != null && !westWall.iAmBoundaryWall)
+            {
+                if (westWall.siblingWall != null)
+                {
+                    Destroy(westWall.siblingWall);
+                }
+                westWall.Destroy();
+            }
+
+
+            if (eastWall != null && !eastWall.iAmBoundaryWall)
+            {
+                if (eastWall.siblingWall != null)
+                {
+                    Destroy(eastWall.siblingWall);
+                }
+                eastWall.Destroy();
+            }
+
+
         }
         else if (wallID == 15)
         {
@@ -239,12 +517,14 @@ public class Room : MonoBehaviour
             }
         }
         else { return; }
+
+
     }
-	
+
     public void CountBoundaryWalls()
     {
         int boundaryWalls = 0;
-          
+
         if (northWall.iAmBoundaryWall)
         {
             boundaryWalls++;
@@ -260,7 +540,7 @@ public class Room : MonoBehaviour
         if (westWall.iAmBoundaryWall)
         {
             boundaryWalls++;
-        
+
         }
         if (eastWall.iAmBoundaryWall)
         {
@@ -272,7 +552,7 @@ public class Room : MonoBehaviour
             IsBoundaryRoom = true;
         }
 
-        
+
 
     }
 

@@ -290,18 +290,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   generate: 1
   changedBoundaryColor: 1
-  wallPerctentage: 0.615
+  wallPerctentage: 0.068
   isFinished: 0
   isFinishedMakingRooms: 0
   dungeonIsPathable: 0
   tester: {fileID: 7512375909403138739, guid: e020210cc747d274a9e92a7fec57e792, type: 3}
   roomFloorPrefab: {fileID: 6574546411225406167, guid: 2692263e8e20ebf41a776b4c1c21fff4,
     type: 3}
-  WorldWidth: 10
+  WorldWidth: 25
   WorldHeight: 1
-  WorldLength: 10
+  WorldLength: 25
   NumOfRooms: 0
-  RoomWidth: 1
+  RoomWidth: 8
   RoomHeight: 1
   RoomLength: 1
   distanceFactor: 1

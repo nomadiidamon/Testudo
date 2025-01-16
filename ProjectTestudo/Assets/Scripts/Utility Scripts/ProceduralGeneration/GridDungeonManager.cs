@@ -82,18 +82,14 @@ public class GridDungeonManager : MonoBehaviour
             {
                 GenerateGridDungeon();
                 SetWorldBoundaries();
-                RemoveWalls();
             }
 
             if (isFinishedMakingRooms)
             {
-                CheckPaths();
-
-                //if (!IsPathable())
-                //{
-                    RemoveWalls();
-
-                //}
+       
+                RemoveWalls();
+                RemoveWalls();
+                //RemoveWalls();
             }
 
 
@@ -153,7 +149,7 @@ public class GridDungeonManager : MonoBehaviour
 
     }
 
-    public void SetWorldBoundaries()
+    private void SetWorldBoundaries()
     {
         for (int i = 0; i < walls.Count; i++)
         {
@@ -182,77 +178,86 @@ public class GridDungeonManager : MonoBehaviour
     public void RemoveWalls()
     {
 
+
+        //for (int i = 0; i < rooms.Count; i++)
+        //{
+        //    rooms[i].CountBoundaryWalls();
+
+        //    rooms[i].RemoveSharedWalls(rooms);
+
+
+        //    if (i % RoomWidth == 0)
+        //    {
+        //        int side = Random.Range(1, 4);
+
+        //        switch (side)
+        //        {
+        //            case 1:
+        //                rooms[i].northWall.gameObject.SetActive(false);
+        //                break;
+
+        //            case 2:
+        //                rooms[i].eastWall.gameObject.SetActive(false);
+        //                break;
+
+        //            case 3:
+        //                rooms[i].southWall.gameObject.SetActive(false);
+        //                break;
+
+        //            case 4:
+        //                rooms[i].westWall.gameObject.SetActive(false);
+        //                break;
+
+        //            default:
+        //                break;
+
+
+
+
+        //        }
+        //    }
+
+
+        //}
         //randomly deactivate walls
-        int randomNum = UnityEngine.Random.Range(0, 15);
-        int max = rooms.Count;
-        for (int i = max; i < (max % (randomNum +1)); i--)
+        //int randomNum = UnityEngine.Random.Range(0, 15);
+        //int max = rooms.Count;
+        //for (int i = max; i < (max % (randomNum +1)); i--)
+        //{
+        //    int newRandomNum = UnityEngine.Random.Range(0, 15);
+        //    rooms[i].DisableWall(newRandomNum);
+
+        //}
+
+        for (int i = 0; i < walls.Count; i++)
         {
-            int newRandomNum = UnityEngine.Random.Range(0, 15);
-            rooms[i].DisableWall(newRandomNum);
-        }
-         
-        for (int i = 0; i < rooms.Count; i++)
-        {
-            rooms[i].CountBoundaryWalls();
-
-            rooms[i].RemoveSharedWalls(rooms);
-
-
-            if (i % RoomWidth == 0)
+            for (int j = 0; j < boundaryWalls.Count; j++)
             {
-                int side = Random.Range(1, 4);
-
-                switch (side)
+                if (walls[i] == boundaryWalls[j])
                 {
-                    case 1:
-                        rooms[i].northWall.gameObject.SetActive(false);
-                        break;
-
-                    case 2:
-                        rooms[i].eastWall.gameObject.SetActive(false);
-                        break;
-
-                    case 3:
-                        rooms[i].southWall.gameObject.SetActive(false);
-                        break;
-
-                    case 4:
-                        rooms[i].westWall.gameObject.SetActive(false);
-                        break;
-
-                    default:
-                        break;
-
-
-
-
+                    walls.RemoveAt(i);
                 }
             }
-
-
         }
-    }
 
-    public void CheckPaths()
-    {
-        // Test dungeon for pathing
+        
 
-        //if traversable set dungeonIsPathable to true
-
-        // otherwise set it to false and call remove walls again
-    }
-
-    public bool IsPathable()
-    {
-        if (dungeonIsPathable)
+        for (int i = 0; i < walls.Count; i++)
         {
-            return true;
-        }
-        else
-        {
-            return false;
+
+            if (walls[i].myRoom.IsBoundaryRoom)
+            {
+                continue;
+            }
+            else
+            {
+                int randomNumForWallOperation = Random.Range(1, 16);
+                walls[i].myRoom.DisableWall(randomNumForWallOperation);
+            }
+
         }
 
     }
+
 
 }

@@ -42,6 +42,19 @@ public class Wall : MonoBehaviour
             {
                 iAmBoundaryWall = true;
             }
+
+            for (int i = 0; i < myContacts.Count; i++)
+            {
+                if (myContacts[i] != null && myContacts[i].transform == transform)
+                {
+                    Wall theirWall = myContacts[i].GetComponent<Wall>();
+                    if (theirWall != null)
+                    {
+                        siblingWall = theirWall;
+                    }
+                }
+            }
+            
         }
         return iAmBoundaryWall;
     }
@@ -51,25 +64,10 @@ public class Wall : MonoBehaviour
         if (!iAmBoundaryWall)
         {
             GridDungeonManager.Instance.walls.Remove(this);
-            if (gameObject.activeInHierarchy)
-            {
-                gameObject.SetActive(false);
-            }
             Object.Destroy(this);
         }
     }
 
-
-    public void RemoveSharedWalls(List<Room> room)
-    {
-        for (int i = 0; myContacts.Count > 0; i++)
-        {
-            if (myContacts[i] != null && myContacts[i].transform.position == transform.position)
-            {
-                
-            }
-        }
-    }
 
 
 
