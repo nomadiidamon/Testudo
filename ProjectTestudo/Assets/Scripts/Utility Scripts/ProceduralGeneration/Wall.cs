@@ -7,6 +7,7 @@ public class Wall : MonoBehaviour
     public bool isActive = true;
     public bool iAmBoundaryWall = false;
     public List<Collider> myContacts = new List<Collider>();
+    public int myNumber = 0;
 
 
     public void Start()
@@ -43,6 +44,19 @@ public class Wall : MonoBehaviour
             }
         }
         return iAmBoundaryWall;
+    }
+
+    public void Destroy()
+    {
+        if (!iAmBoundaryWall)
+        {
+            GridDungeonManager.Instance.walls.Remove(this);
+            if (gameObject.activeInHierarchy)
+            {
+                gameObject.SetActive(false);
+            }
+            Object.Destroy(this);
+        }
     }
 
 }

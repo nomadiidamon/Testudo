@@ -9,7 +9,8 @@ public class Room : MonoBehaviour
     [SerializeField] public GameObject roomFloor;
     [SerializeField] public Wall northWall, southWall, eastWall, westWall;
     [SerializeField] public Transform Top_Middle, Bottom_Middle, Left_Middle, Right_Middle;
-    [SerializeField] public float wallRayDistance = 5f; // Adjustable raycast distance
+    private int numOfActiveWalls = 4;
+    private int numOfWalls = 4;
 
     public bool IsBoundaryRoom { get; private set; } = false;
 
@@ -30,6 +31,10 @@ public class Room : MonoBehaviour
         }
         center = roomBounds.center;
         //CheckBoundaryWalls();
+        northWall.myNumber = 1;
+        eastWall.myNumber = 2;
+        southWall.myNumber = 3;
+        westWall.myNumber = 4;
     }
 
     public Room(Vector3 position, int width, int height, int length, GameObject roomPrefab)
@@ -90,71 +95,94 @@ public class Room : MonoBehaviour
         return room;
     }
 
+    public void DisableWall(int wallID)
+    {
+        if (wallID == 0)
+        {
+            northWall.Destroy();
+            eastWall.Destroy();
+            southWall.Destroy();
+            westWall.Destroy();
+        }
+        else if (wallID == 1)
+        {
+            northWall.Destroy();
+        }
+        else if (wallID == 2)
+        {
+            eastWall.Destroy();
+        }
+        else if (wallID == 3)
+        {
+            southWall.Destroy();
+        }
+        else if (wallID == 4)
+        {
+            westWall.Destroy();
+        }
+        else if (wallID == 5)
+        {
+            northWall.Destroy();
+            westWall.Destroy();
+        }
+        else if (wallID == 6)
+        {
+            eastWall.Destroy();
+            southWall.Destroy();
+        }
+        else if (wallID == 7)
+        {
+            southWall.Destroy();
+            westWall.Destroy();
+        }
+        else if (wallID == 8)
+        {
+            northWall.Destroy();
+            eastWall.Destroy();
 
-
-    ///// <summary>
-    ///// Checks each wall to determine if it is a boundary wall.
-    ///// </summary>
-    //public void CheckBoundaryWalls()
-    //{
-    //    if (northWall != null) CheckBoundaryWall(northWall);
-    //    if (southWall != null) CheckBoundaryWall(southWall);
-    //    if (eastWall != null) CheckBoundaryWall(eastWall);
-    //    if (westWall != null) CheckBoundaryWall(westWall);
-    //}
-
-
-
-    ///// <summary>
-    ///// Checks if a specific wall is a boundary wall by performing a raycast.
-    ///// </summary>
-    ///// <param name="wall">The wall to check.</param>
-    //private void CheckBoundaryWall(Wall wall)
-    //{
-
-    //    //Use the wall's transform.forward to determine the outward direction
-    //    Vector3 rayOrigin = wall.transform.position;
-    //    Vector3 rayDirection = Vector3.zero;
-
-    //    if (wall == northWall)
-    //    {
-    //        rayDirection = wall.transform.forward; // Outward from the north wall
-    //    }
-    //    else if (wall == southWall)
-    //    {
-    //        rayDirection = -wall.transform.forward; // Outward from the south wall
-    //    }
-    //    else if (wall == eastWall)
-    //    {
-    //        rayDirection = wall.transform.right; // Outward from the east wall
-    //    }
-    //    else if (wall == westWall)
-    //    {
-    //        rayDirection = -wall.transform.right; // Outward from the west wall
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("Wall is not assigned to any expected variable. Skipping.");
-    //        return;
-    //    }
-
-
-    //    // Perform the raycast in the outward direction
-    //    if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, wallRayDistance))
-    //    {
-    //        Debug.Log($"{wall.name} has a neighbor detected by raycast.");
-    //        wall.iAmBoundaryWall = false;
-    //    }
-    //    else
-    //    {
-    //        Debug.Log($"{wall.name} does not have a neighbor and is marked as a boundary wall.");
-    //        wall.iAmBoundaryWall = true;
-    //    }
-
-    //    // Debug ray for visualization in the scene view
-    //    Debug.DrawLine(rayOrigin, rayDirection * wallRayDistance, Color.red, 100);
-
-
-    //}
+        }
+        else if (wallID == 9)
+        {
+            eastWall.Destroy();
+            westWall.Destroy();
+        }
+        else if (wallID == 10)
+        {
+            northWall.Destroy();
+            southWall.Destroy();
+        }
+        else if (wallID == 11)
+        {
+            northWall.Destroy();
+            southWall.Destroy();
+            eastWall.Destroy();
+        }
+        else if (wallID == 12)
+        {
+            northWall.Destroy();
+            southWall.Destroy();
+            westWall.Destroy();
+        }
+        else if (wallID == 13)
+        {
+            southWall.Destroy();
+            eastWall.Destroy();
+            westWall.Destroy();
+        }
+        else if (wallID == 14)
+        {
+            northWall.Destroy();
+            westWall.Destroy();
+            eastWall.Destroy();
+        }
+        else if (wallID == 15)
+        {
+            if (roomFloor != null)
+            {
+                roomFloor.gameObject.gameObject.SetActive(false);
+            }
+        }
+        else { return; }
+    }
 
 }

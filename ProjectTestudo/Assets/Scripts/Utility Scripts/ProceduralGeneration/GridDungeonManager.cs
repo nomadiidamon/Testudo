@@ -75,11 +75,11 @@ public class GridDungeonManager : MonoBehaviour
             {
                 CheckPaths();
 
-                if (!IsPathable())
-                {
+                //if (!IsPathable())
+                //{
                     RemoveWalls();
 
-                }
+                //}
             }
 
 
@@ -158,6 +158,14 @@ public class GridDungeonManager : MonoBehaviour
     public void RemoveWalls()
     {
         //randomly deactivate walls
+        int randomNum = UnityEngine.Random.Range(0, 15);
+        int max = rooms.Count;
+        for (int i = max; i < (max % (randomNum +1)); i--)
+        {
+            int newRandomNum = UnityEngine.Random.Range(0, 15);
+            rooms[i].DisableWall(newRandomNum);
+        }
+         
     }
 
     public void CheckPaths()
