@@ -7,15 +7,25 @@ public class GridDungeonManager : MonoBehaviour
 {
     public static GridDungeonManager Instance { get; private set; } // Singleton instance
     public bool generate = false;
+    public bool changedBoundaryColor = false;
+    [Header("Wall Percentage")]
+    [Range(0, 1)] public float wallPerctentage = 1f;
+    [Space(10)]
+
+
     public bool isFinished = false;
     public bool isFinishedMakingRooms = false;
     public bool dungeonIsPathable = false;
 
+    [Header("Test Dummy")]
+    public GameObject tester;
+    [Header("Test Strength")]
+    [Range(0, 1)] float testStrength = 1f;
 
 
     [Header("Prefabs")]
     public GameObject roomFloorPrefab;
-    public GameObject roomDoorPrefab;
+    //public GameObject roomDoorPrefab;
     [Space(10)]
 
     [Header("World Parameters")]
@@ -29,10 +39,12 @@ public class GridDungeonManager : MonoBehaviour
     [Range(1, 50)] public int RoomWidth = 15;
     [Range(1, 50)] public int RoomHeight = 15;
     [Range(1, 50)] public int RoomLength = 15;
-    [Space(10)]
 
     [Header("Room Distance")]
     [Range(0, 5)] public float distanceFactor = 0.5f;
+
+
+
 
     [Header("Collections")]
     public List<Room> rooms = new List<Room>();
@@ -55,6 +67,7 @@ public class GridDungeonManager : MonoBehaviour
             Destroy(gameObject);
         }
         NumOfRooms = WorldWidth * WorldLength;
+
     }
 
     void Update()
@@ -69,6 +82,7 @@ public class GridDungeonManager : MonoBehaviour
             {
                 GenerateGridDungeon();
                 SetWorldBoundaries();
+                RemoveWalls();
             }
 
             if (isFinishedMakingRooms)
@@ -127,6 +141,7 @@ public class GridDungeonManager : MonoBehaviour
                     }
                     GenerateGridRoom(currentWorldSize, RoomWidth, RoomHeight, RoomLength);
                     currentWorldSize = currentWorldSize.Add(z: 1 * distanceFactor);
+
                 }
                 currentWorldSize = currentWorldSize.WithZ(transform.position.z);
                 currentWorldSize = currentWorldSize.Add(x: 1 * distanceFactor);
@@ -150,13 +165,23 @@ public class GridDungeonManager : MonoBehaviour
             if (walls[i].iAmBoundaryWall)
             {
                 boundaryWalls.Add(walls[i]);
-                walls[i].gameObject.SetMaterialColor(Color.white);
+
+                if (changedBoundaryColor)
+                {
+                    MeshRenderer rend = walls[i].GetComponent<MeshRenderer>();
+                    if (rend != null)
+                    {
+                        walls[i].gameObject.SetMaterialColor(Color.white);
+                    }
+                }
+
             }
         }
     }
 
     public void RemoveWalls()
     {
+
         //randomly deactivate walls
         int randomNum = UnityEngine.Random.Range(0, 15);
         int max = rooms.Count;
@@ -166,6 +191,46 @@ public class GridDungeonManager : MonoBehaviour
             rooms[i].DisableWall(newRandomNum);
         }
          
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            rooms[i].CountBoundaryWalls();
+
+            rooms[i].RemoveSharedWalls(rooms);
+
+
+            if (i % RoomWidth == 0)
+            {
+                int side = Random.Range(1, 4);
+
+                switch (side)
+                {
+                    case 1:
+                        rooms[i].northWall.gameObject.SetActive(false);
+                        break;
+
+                    case 2:
+                        rooms[i].eastWall.gameObject.SetActive(false);
+                        break;
+
+                    case 3:
+                        rooms[i].southWall.gameObject.SetActive(false);
+                        break;
+
+                    case 4:
+                        rooms[i].westWall.gameObject.SetActive(false);
+                        break;
+
+                    default:
+                        break;
+
+
+
+
+                }
+            }
+
+
+        }
     }
 
     public void CheckPaths()

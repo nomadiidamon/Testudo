@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    public bool isActive = true;
     public bool iAmBoundaryWall = false;
     public List<Collider> myContacts = new List<Collider>();
     public int myNumber = 0;
+
+    public Room myRoom {  get; set; }
+    public Wall siblingWall { get; set; }
+
 
 
     public void Start()
     {
     }
-
-
-    public void SetActive(bool active) { isActive = active; }
 
     public bool IsBoundary()
     {
@@ -58,5 +58,19 @@ public class Wall : MonoBehaviour
             Object.Destroy(this);
         }
     }
+
+
+    public void RemoveSharedWalls(List<Room> room)
+    {
+        for (int i = 0; myContacts.Count > 0; i++)
+        {
+            if (myContacts[i] != null && myContacts[i].transform.position == transform.position)
+            {
+                
+            }
+        }
+    }
+
+
 
 }
