@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMoveAction : PlayerInputActionBase
 {
-    public Vector2 input;
+    private Vector2 input;
     public Vector3 inputVector3 = Vector3.zero;
     protected override void HandleInput(InputAction.CallbackContext context)
     {

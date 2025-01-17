@@ -7,7 +7,7 @@ public class MovementController : MonoBehaviour
 
     [HideInInspector] Animator animator;
     [HideInInspector] Rigidbody rb;
-    public Vector3 direction = Vector3.zero;
+    public Vector3 moveVector = Vector3.zero;
 
     [Header("Movement Factors")]
     [SerializeField] public float walkSpeed;
@@ -27,8 +27,12 @@ public class MovementController : MonoBehaviour
     [SerializeField] public float grappleSpeed;
     [SerializeField] public float grappleDistance;
 
-    public PlayerMoveAction moveAction;
 
+    public PlayerMoveAction moveAction;
+    // Jump action
+    // dodge action
+    // graity shift action
+    // grapple action
 
 
     void Awake()
@@ -39,23 +43,26 @@ public class MovementController : MonoBehaviour
         {
             moveAction = GetComponent<PlayerMoveAction>();
             moveAction.enabled = true;
+            if (moveAction != null)
+            {
+                moveAction.onInputPerformed.AddListener(UpdateMovementDirection);
+            }
+            inputActions.Add(moveAction);
         }
-        if (moveAction != null)
-        {
-            moveAction.onInputPerformed.AddListener(UpdateMovementDirection);
-        }
+        
+        // initialize all other input actions
     }
 
     private void UpdateMovementDirection()
     {
-        direction = new Vector3(moveAction.input.x, 0, moveAction.input.y).normalized;
+        moveVector = moveAction.inputVector3.normalized;
     }
 
     void FixedUpdate()
     {
-        if (rb != null && direction != Vector3.zero)
+        if (rb != null && moveVector != Vector3.zero)
         {
-            rb.MovePosition(rb.position + direction * walkSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + moveVector * walkSpeed * Time.fixedDeltaTime);
         }
     }
 
