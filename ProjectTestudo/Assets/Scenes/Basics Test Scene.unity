@@ -658,6 +658,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 339127614}
+  - component: {fileID: 339127617}
+  - component: {fileID: 339127616}
+  - component: {fileID: 339127615}
   - component: {fileID: 339127613}
   - component: {fileID: 339127612}
   - component: {fileID: 339127611}
@@ -756,6 +759,124 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &339127615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339127610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7731ce55881cd854790fefb03625c2f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mover: {fileID: 339127616}
+  stateMachine: {fileID: 0}
+  direction: {x: 0, y: 0, z: 0}
+--- !u!114 &339127616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339127610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f30dc795b98e9c46a354631afd2b683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0, z: 0}
+  walkSpeed: 3
+  sprintSpeed: 0
+  crouchSpeed: 0
+  jumpMax: 0
+  jumpForce: 0
+  dodgeForce: 0
+  dodgeTime: 0
+  grappleForce: 0
+  grappleSpeed: 0
+  grappleDistance: 0
+  moveAction: {fileID: 339127617}
+--- !u!114 &339127617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339127610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 212cb784db22dc843888c27cb4d12b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: 51bd8dfa-40f4-4aff-9650-d6f0b0e7e1fa
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 2D Vector
+      m_Id: 93ad84d1-5595-4c40-a7dc-33f8ddf77a25
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 7b3ae593-b640-45aa-9ec4-a66540401680
+      m_Path: <Gamepad>/leftStick/up
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 9af2ec64-254f-4c30-a738-f7b2702a4301
+      m_Path: <Gamepad>/leftStick/down
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 5b577dac-4029-42f3-8d43-5777e6837b62
+      m_Path: 
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 7130a1b2-576c-4bb0-9e47-9c538158cd6c
+      m_Path: 
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 8
+    m_Flags: 0
+  actionName: Move
+  onInputPerformed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  input: {x: 0, y: 0}
+  inputVector3: {x: 0, y: 0, z: 0}
 --- !u!1 &358507524
 GameObject:
   m_ObjectHideFlags: 0

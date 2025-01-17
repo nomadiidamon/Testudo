@@ -8,8 +8,10 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     Rigidbody rb;
 
-    MovementController mover;
-    StateMachine stateMachine;
+    [SerializeField]public MovementController mover;
+    [SerializeField]StateMachine stateMachine;
+
+    public Vector3 direction = Vector3.zero;
 
     void Start()
     {
@@ -18,6 +20,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
+        //stateMachine.Update();
     }
 }
