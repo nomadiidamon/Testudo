@@ -15,13 +15,16 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 direction = Vector3.zero;
 
-    void Start()
+    void Awake()
     {
-        
+        inputManager = GetComponent<PlayerInputManager>();
+        mover = GetComponent<MovementController>();
+
     }
 
     void Update()
     {
         //stateMachine.Update();
+        
     }
 }

@@ -47,7 +47,6 @@ public class MovementController : MonoBehaviour
             {
                 moveAction.onInputPerformed.AddListener(UpdateMovementDirection);
             }
-            inputActions.Add(moveAction);
         }
         
         // initialize all other input actions
@@ -55,15 +54,23 @@ public class MovementController : MonoBehaviour
 
     private void UpdateMovementDirection()
     {
-        moveVector = moveAction.inputVector3.normalized;
+        if (moveAction.inputVector3.sqrMagnitude > 0.01f) // If input is significant
+        {
+            moveVector = moveAction.inputVector3.normalized;
+        }
+        else
+        {
+            moveVector = Vector3.zero; // Stop movement if no input
+        }
     }
 
     void FixedUpdate()
     {
-        if (rb != null && moveVector != Vector3.zero)
+        UpdateMovementDirection();
+        if (rb != null)
         {
             rb.MovePosition(rb.position + moveVector * walkSpeed * Time.fixedDeltaTime);
-        }
+        }   
     }
 
     void OnDestroy()
