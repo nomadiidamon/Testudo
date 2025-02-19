@@ -1,6 +1,6 @@
 ﻿using System;
 
-public interface IStateACondition : IConditional, IBooleanCondition
+public interface IStateACondition : IBooleanCondition
 {
     public bool IsConditionMet();
 }
