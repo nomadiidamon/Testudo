@@ -5,26 +5,25 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    Animator animator;
     Rigidbody rb;
 
-    [SerializeField]public PlayerInputManager inputManager;
-
-    [SerializeField]public AbilityController abilityController;
-    [SerializeField]public MovementController mover;
+    [SerializeField] public AbilityController abilityController;
+    [SerializeField] public MovementController mover;
 
     public Vector3 direction = Vector3.zero;
 
     void Awake()
     {
-        inputManager = GetComponent<PlayerInputManager>();
-        mover = GetComponent<MovementController>();
+        mover = GetComponentInChildren<MovementController>();
+        rb = GetComponent<Rigidbody>();
 
     }
 
     void Update()
     {
-        //stateMachine.Update();
-        
+        if (mover != null)
+        {
+            //direction = mover.moveVector + direction;
+        }
     }
 }

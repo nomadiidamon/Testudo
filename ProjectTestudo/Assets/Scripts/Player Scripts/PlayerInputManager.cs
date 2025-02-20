@@ -13,6 +13,7 @@ public class PlayerInputManager : MonoBehaviour
     void Awake()
     {
         playerControls = GetComponent<PlayerControls>();
+   
         playerControls.Enable();
         playerControls.Player.Move.performed += ctx => ctx.ReadValue<Vector2>();
         playerControls.Player.Move.canceled += ctx => moveInput = Vector2.zero;

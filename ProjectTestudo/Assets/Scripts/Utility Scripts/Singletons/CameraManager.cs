@@ -10,6 +10,7 @@ public class CameraManager : MonoBehaviour
     [Header("Player Camera")]
     public CinemachineVirtualCamera playerCamera;
     public Transform playerTransform;
+    public Ray centerRay;
 
 
 
@@ -27,6 +28,8 @@ public class CameraManager : MonoBehaviour
 
     void Update()
     {
-        
+        centerRay = mainCamera.GetCenterRay();
+
+        Debug.DrawRay(centerRay.origin, centerRay.direction, Color.green, 100.0f);
     }
 }

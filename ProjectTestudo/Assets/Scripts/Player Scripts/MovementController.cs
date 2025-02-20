@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,9 +6,9 @@ using UnityEngine;
 public class MovementController : MonoBehaviour
 {
 
-    [HideInInspector] Animator animator;
-    [HideInInspector] Rigidbody rb;
+    [SerializeField] Rigidbody rb;
     public Vector3 moveVector = Vector3.zero;
+    [SerializeField] GravityController gravController;
 
     [Header("Movement Factors")]
     [SerializeField] public float walkSpeed;
@@ -27,6 +28,8 @@ public class MovementController : MonoBehaviour
     [SerializeField] public float grappleSpeed;
     [SerializeField] public float grappleDistance;
 
+    [Header("Rotation Speed")]
+    [SerializeField] public float rotateToCameraSpeed = 1.0f;
 
     public PlayerMoveAction moveAction;
     // Jump action
@@ -35,10 +38,11 @@ public class MovementController : MonoBehaviour
     // grapple action
 
 
+    [SerializeField] private CinemachineFreeLook freeLookCamera;
+    [SerializeField] private CinemachineBrain cameraBrain;
+
     void Awake()
     {
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
         if (moveAction == null)
         {
             moveAction = GetComponent<PlayerMoveAction>();
@@ -47,8 +51,7 @@ public class MovementController : MonoBehaviour
             {
                 moveAction.onInputPerformed.AddListener(UpdateMovementDirection);
             }
-        }
-        
+        }        
         // initialize all other input actions
     }
 
@@ -56,21 +59,34 @@ public class MovementController : MonoBehaviour
     {
         if (moveAction.inputVector3.sqrMagnitude > 0.01f) // If input is significant
         {
-            moveVector = moveAction.inputVector3.normalized;
+            moveVector = moveAction.inputVector3;
+            rb.rotation = Quaternion.Lerp(rb.rotation, freeLookCamera.transform.rotation, Time.deltaTime * rotateToCameraSpeed);
+            if (rb.transform.forward != transform.forward)
+            {
+                transform.forward = freeLookCamera.transform.forward;
+                rb.transform.forward = transform.forward;
+
+            }
         }
         else
         {
             moveVector = Vector3.zero; // Stop movement if no input
         }
+        Vector3 newMove = moveVector;
+        newMove  = gravController.UpdateGravity(newMove);
+        rb.AddForce(newMove);
+        
     }
 
-    void FixedUpdate()
+
+    private void Update()
     {
         UpdateMovementDirection();
         if (rb != null)
         {
-            rb.MovePosition(rb.position + moveVector * walkSpeed * Time.fixedDeltaTime);
-        }   
+            rb.MovePosition(rb.position + ((moveVector) * walkSpeed * Time.deltaTime));
+        }
+
     }
 
     void OnDestroy()
