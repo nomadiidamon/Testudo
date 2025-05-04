@@ -9,6 +9,6 @@ public class PlayerMoveAction : PlayerInputActionBase
     protected override void HandleInput(InputAction.CallbackContext context)
     {
         input = context.ReadValue<Vector2>(); // Read input as a Vector2
-        inputVector3 = new Vector3(input.x, 0, input.y);
+        inputVector3 = inputVector3 + new Vector3(input.x, 0, input.y);
     }
 }
